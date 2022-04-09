@@ -2,7 +2,6 @@ package dev.brumagin.data;
 
 import dev.brumagin.entity.BankAccount;
 import dev.brumagin.entity.CheckingBankAccount;
-import dev.brumagin.entity.Customer;
 import dev.brumagin.utility.ConnectionUtility;
 import dev.brumagin.utility.LinkedList;
 
@@ -56,8 +55,6 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
                 account.setAccountNumber(rs.getLong("account_id"));
                 accounts.add(account);
             }
-                System.out.println(accounts.getNode(0));
-
 
             return accounts;
         } catch (SQLException e) {

@@ -1,0 +1,36 @@
+package dev.brumagin.servicestests;
+
+import dev.brumagin.entity.BankAccount;
+import dev.brumagin.entity.Customer;
+import dev.brumagin.service.BankAccountService;
+import dev.brumagin.service.BankAccountServiceImpl;
+import dev.brumagin.service.CustomerService;
+import dev.brumagin.service.CustomerServiceImpl;
+import org.junit.jupiter.api.*;
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class BankAccountServiceTests {
+
+    static BankAccountService bankAccountService = new BankAccountServiceImpl();
+    static BankAccount testAccount;
+
+    static CustomerService cService = new CustomerServiceImpl();
+    static Customer testCustomer;
+    @Test
+    @Order(1)
+    void create_account(){
+        testCustomer = cService.createCustomer("Santa","Claus");
+        testAccount = bankAccountService.createAccount(testCustomer);
+        Assertions.assertNotEquals(0,testAccount.getAccountNumber());
+    }
+
+    @Test
+    @Order(2)
+    void deposit_small(){
+        double currentMoney = testAccount.getAccountBalance();
+        testAccount = bankAccountService.deposit(testAccount,200);
+        Assertions.assertEquals(currentMoney +200,testAccount.getAccountBalance());
+    }
+
+
+}

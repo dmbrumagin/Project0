@@ -42,6 +42,7 @@ public class BankAccountDaoTests{
         Assertions.assertEquals(testAccount.getAccountNumber(),account.getAccountNumber());
     }
 
+    @Disabled
     @Test
     @Order(4)
     void delete_account_by_id(){
@@ -52,7 +53,11 @@ public class BankAccountDaoTests{
     @Test
     @Order(5)
     void get_all_accounts_by_user_id(){
-        LinkedList<BankAccount> bankAccountList= bankAccountDAO.getAllBankAccounts(21);
-        Assertions.assertEquals(6,bankAccountList.size());
+        Customer customer = new Customer("Bob","Evans");
+        BankAccount account = new CheckingBankAccount(customerDAO.createCustomer(customer).getCustomerID(), 200L);
+        account = bankAccountDAO.createAccount(account);
+        int customerId= account.getAccountHolder();
+        LinkedList<BankAccount> bankAccountList= bankAccountDAO.getAllBankAccounts(customerId);
+        Assertions.assertEquals(1,bankAccountList.size());
     }
 }

@@ -4,6 +4,7 @@ import dev.brumagin.entity.Customer;
 import dev.brumagin.service.CustomerService;
 import dev.brumagin.service.CustomerServiceImpl;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class CustomerServiceTests {
@@ -50,6 +51,22 @@ public class CustomerServiceTests {
     void update_customer(){
         Customer customer = cService.getCustomer(1);
         Assertions.assertTrue(cService.updateName(customer, customer.getFirstName()+"edit", customer.getLastName()+"edit"));
+
+    }
+
+    @Disabled
+    @Test
+    void create_login_with_valid_security(){
+        String username = "MuffinMan";
+        String password = "Gingerbread127#";
+        String s1 = "Danny";
+        String s2 = "Boy";
+
+        Customer customer = cService.createCustomer(s1,s2);
+        customer.setUsername(username);
+        customer.setPassword(password);
+
+       // LoginCredential createdLogon = loginCredentialDAO.createLogin(logon);
 
     }
 }

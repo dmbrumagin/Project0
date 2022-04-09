@@ -42,4 +42,40 @@ public class CustomerDaoTests {
         Assertions.assertTrue(deleted);
     }
 
+    @Test
+    void create_login(){
+        testCustomer.setUsername("username4");
+        testCustomer.setPassword("passwordTest");
+        Customer localCustomer = customerDAO.createLogin(testCustomer);
+        Assertions.assertEquals(localCustomer.getUsername(),testCustomer.getUsername());
+    }
+
+
+    @Test
+    @Order(2)
+    void get_login_from_credential(){
+        int login = customerDAO.getLogin(testCustomer);
+        Assertions.assertNotEquals(-1,login);
+    }
+    @Test
+    @Order(3)
+    void get_login_from_username(){
+        boolean login = customerDAO.getLogin(testCustomer.getUsername());
+        Assertions.assertTrue(login);
+    }
+
+    @Test
+    @Order(4)
+    void update_login_from_credential(){
+        testCustomer.setPassword("passwordChanged");
+        Customer customer = customerDAO.updateLogin(testCustomer);
+        Assertions.assertEquals("passwordChanged",customer.getPassword());
+    }
+    @Test
+    @Order(5)
+    void delete_login_credentials(){
+        boolean login = customerDAO.deleteLogin(testCustomer);
+        Assertions.assertTrue(login);
+    }
+
 }
