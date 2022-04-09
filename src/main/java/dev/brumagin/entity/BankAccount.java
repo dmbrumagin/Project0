@@ -4,48 +4,48 @@ abstract public class BankAccount{
 
     protected long accountNumber;
     protected double accountBalance;
-    protected Customer accountHolder;
-    protected Customer jointAccountHolder;
+    protected int accountHolder;
+    protected int jointAccountHolder;
 
     public BankAccount(){
-        this.accountHolder = null;
-        this.jointAccountHolder = null;
+        this.accountHolder = 0;
+        this.jointAccountHolder = 0;
         this.accountBalance = 0;
         this.accountNumber = 0;
     }
 
-    public BankAccount(Customer accountHolder){
+    public BankAccount(int accountHolder){
         this.accountHolder = accountHolder;
         accountBalance = 0;
         this.accountNumber = 0;
     }
 
-    public BankAccount(Customer accountHolder, double accountBalance){
+    public BankAccount( int accountHolder, double accountBalance){
         this(accountHolder);
         this.accountBalance = accountBalance;
         this.accountNumber = 0;
     }
 
-    public BankAccount(Customer accountHolder, Customer jointAccountHolder, double accountBalance){
+    public BankAccount(int accountHolder, int jointAccountHolder, double accountBalance){
         this(accountHolder);
         this.jointAccountHolder = jointAccountHolder;
         this.accountBalance = accountBalance;
         this.accountNumber = 0;
     }
 
-    public Customer getAccountHolder() {
+    public int getAccountHolder() {
         return accountHolder;
     }
 
-    public void setAccountHolder(Customer accountHolder) {
+    public void setAccountHolder(int accountHolder) {
         this.accountHolder = accountHolder;
     }
 
-    public Customer getJointAccountHolder() {
+    public int getJointAccountHolder() {
         return jointAccountHolder;
     }
 
-    public void setJointAccountHolder(Customer jointAccountHolder) {
+    public void setJointAccountHolder(int jointAccountHolder) {
         this.jointAccountHolder = jointAccountHolder;
     }
 

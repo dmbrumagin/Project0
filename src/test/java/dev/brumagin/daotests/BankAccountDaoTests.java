@@ -7,6 +7,7 @@ import dev.brumagin.data.CustomerDAOPostgresImpl;
 import dev.brumagin.entity.BankAccount;
 import dev.brumagin.entity.CheckingBankAccount;
 import dev.brumagin.entity.Customer;
+import dev.brumagin.utility.LinkedList;
 import org.junit.jupiter.api.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -22,7 +23,7 @@ public class BankAccountDaoTests{
     void create_account(){
         Customer customer = new Customer("Bob","Evans");
 
-        BankAccount account = new CheckingBankAccount(customerDAO.createCustomer(customer), 200L);
+        BankAccount account = new CheckingBankAccount(customerDAO.createCustomer(customer).getCustomerID(), 200L);
         testAccount = bankAccountDAO.createAccount(account);
         Assertions.assertNotEquals( 0,testAccount.getAccountNumber());
     }
@@ -33,7 +34,6 @@ public class BankAccountDaoTests{
         BankAccount account = bankAccountDAO.getAccountByNumber(testAccount.getAccountNumber());
         Assertions.assertEquals(account.getAccountNumber(),testAccount.getAccountNumber());
     }
-
     @Test
     @Order(3)
     void update_account_by_reference(){
@@ -42,7 +42,6 @@ public class BankAccountDaoTests{
         Assertions.assertEquals(testAccount.getAccountNumber(),account.getAccountNumber());
     }
 
-
     @Test
     @Order(4)
     void delete_account_by_id(){
@@ -50,5 +49,10 @@ public class BankAccountDaoTests{
         Assertions.assertTrue(deleted);
     }
 
-
+    @Test
+    @Order(5)
+    void get_all_accounts_by_user_id(){
+        LinkedList<BankAccount> bankAccountList= bankAccountDAO.getAllBankAccounts(21);
+        Assertions.assertEquals(6,bankAccountList.size());
+    }
 }

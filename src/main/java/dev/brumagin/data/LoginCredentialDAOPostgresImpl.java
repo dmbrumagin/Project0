@@ -1,5 +1,6 @@
 package dev.brumagin.data;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import dev.brumagin.entity.LoginCredential;
 import dev.brumagin.utility.ConnectionUtility;
 import java.sql.*;
@@ -28,7 +29,7 @@ public class LoginCredentialDAOPostgresImpl implements LoginCredentialDAO{
     }
 
     @Override
-    public LoginCredential getLogin(LoginCredential loginCredential) {
+    public int getLogin(LoginCredential loginCredential) {
         System.out.println(loginCredential);
         try {
 
@@ -39,13 +40,14 @@ public class LoginCredentialDAOPostgresImpl implements LoginCredentialDAO{
 
             ResultSet rs = ps.executeQuery();
             rs.next();
-            LoginCredential login = new LoginCredential();
-            login.setUsername(rs.getString("username"));
-            login.setPassword(rs.getString("user_password"));
-            return login;
+            //TODO
+            //LoginCredential login = new LoginCredential();
+           // login.setUsername(rs.getString("username"));
+            //login.setPassword(rs.getString("user_password"));
+            return rs.getInt("user_id");
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return -1;
         }
     }
 

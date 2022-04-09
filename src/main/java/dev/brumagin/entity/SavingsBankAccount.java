@@ -8,17 +8,17 @@ public class SavingsBankAccount extends BankAccount {
         super();
     }
 
-    public SavingsBankAccount(Customer accountHolder){
+    public SavingsBankAccount(int accountHolder){
         super(accountHolder);
         this.interestRate= 0.025f;
     }
 
-    public SavingsBankAccount(Customer accountHolder, double startingDeposit){
+    public SavingsBankAccount(int accountHolder, double startingDeposit){
         super(accountHolder,startingDeposit);
         this.interestRate= 0.025f;
     }
 
-    public SavingsBankAccount(Customer accountHolder, Customer jointAccountHolder, double startingDeposit){
+    public SavingsBankAccount(int accountHolder, int jointAccountHolder, double startingDeposit){
         super(accountHolder,jointAccountHolder,startingDeposit);
         this.interestRate= 0.025f;
     }

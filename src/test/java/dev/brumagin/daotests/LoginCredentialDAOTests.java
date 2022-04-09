@@ -24,9 +24,8 @@ public class LoginCredentialDAOTests {
     @Test
     @Order(2)
     void get_login_from_credential(){
-        LoginCredential login = loginCredential.getLogin(testLogin);
-        Assertions.assertEquals(login.getUsername(),testLogin.getUsername());
-        Assertions.assertEquals(login.getPassword(),testLogin.getPassword());
+        int login = loginCredential.getLogin(testLogin);
+        Assertions.assertNotEquals(-1,login);
     }
     @Test
     @Order(3)
