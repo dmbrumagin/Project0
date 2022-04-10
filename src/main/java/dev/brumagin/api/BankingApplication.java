@@ -19,6 +19,8 @@ public class BankingApplication {
 
     public static void main (String[] args){
 
+        System.out.println("Welcome to Negative Root Banking Inc.\n" +
+                "Please access an account so we can assist you further.");
         welcomeControlFlow();
 
 
@@ -36,12 +38,7 @@ public class BankingApplication {
 
 
     }
-    static void dissuadeBruteForce(){
-
-    }
     static void welcomeControlFlow(){
-        System.out.println("Welcome to Not A Real Bank Banking inc.\n" +
-                "Please access an account so we can assist you further.");
         System.out.println("Which option would you like to choose?");
         System.out.println("1. Register a new account/user.");
         System.out.println("2. Login to an existing account.\n");
@@ -81,10 +78,6 @@ public class BankingApplication {
             }
         }while(!validInput);
     }
-
-
-
-
 
     static void registerAccountControlFlow(){
         boolean validInput;
@@ -148,6 +141,10 @@ public class BankingApplication {
         }while (!validInput);
     }
 
+    static void dissuadeBruteForce(){
+
+    }
+
     static void jointAccountControlFlow(Customer mainHolder){
         boolean validInput;
 
@@ -182,12 +179,12 @@ public class BankingApplication {
             validInput=true;
             switch (inputOption) {
                 case 1:
-                    CheckingBankAccount checkingBankAccount = (CheckingBankAccount) bankAccountService.createAccount(mainHolder.getCustomerID(),jointHolder.getCustomerID(),'c');
-                    System.out.println("You successfully created your account.");
+                    bankAccountService.createAccount(mainHolder.getCustomerID(),jointHolder.getCustomerID(),'c');
+                    System.out.println("You successfully created your account.\n\n");
                     break;
                 case 2:
-                    SavingsBankAccount savingsBankAccount = (SavingsBankAccount) bankAccountService.createAccount(mainHolder.getCustomerID(),jointHolder.getCustomerID(),'s');
-                    System.out.println("You successfully created your account.");
+                    bankAccountService.createAccount(mainHolder.getCustomerID(),jointHolder.getCustomerID(),'s');
+                    System.out.println("You successfully created your account.\n\n");
                     break;
                 default:
                     System.out.println("You did not enter a valid option.\n" +

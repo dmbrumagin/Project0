@@ -3,20 +3,22 @@ package dev.brumagin.servicestests;
 import dev.brumagin.entity.Customer;
 import dev.brumagin.service.CustomerService;
 import dev.brumagin.service.CustomerServiceImpl;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CustomerServiceTests {
 
     static CustomerService cService = new CustomerServiceImpl();
+    static Customer testCustomer;
 
     @Test
+    @Order(1)
     void create_customer(){
         String s1 = "Danny";
         String s2 = "Boy";
 
         Customer customer = cService.createCustomer(s1,s2);
+        testCustomer = customer;
         Assertions.assertNotEquals(0,customer.getCustomerID());
     }
 
@@ -48,8 +50,10 @@ public class CustomerServiceTests {
     }
 
     @Test
+    @Order(2)
     void update_customer(){
-        Customer customer = cService.getCustomer(1);
+
+        Customer customer = cService.getCustomer(testCustomer.getCustomerID());
         Assertions.assertTrue(cService.updateName(customer, customer.getFirstName()+"edit", customer.getLastName()+"edit"));
 
     }
@@ -147,7 +151,7 @@ public class CustomerServiceTests {
     }
     @Test
     void login_with_valid(){
-        String username = "MuffinMan2";
+        String username = "MuffinMan3";
         String password = "Blues12345!";
 
         String s1 = "Danny";

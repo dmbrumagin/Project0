@@ -4,11 +4,11 @@ import dev.brumagin.entity.Customer;
 
 public interface CustomerDAO {
     Customer createCustomer (Customer customer);
-    Customer getCustomerById (int customerId);
+    Customer getCustomerById (String customerId);
     Customer updateCustomer (Customer customer);
-    boolean deleteCustomer(int customerId);
+    boolean deleteCustomer(String customerId);
     Customer createLogin(Customer customer);
-    int getLogin(String username,String password);
+    String getLogin(String username,String password);
     boolean getLogin(String username);
     Customer updateLogin(Customer customer);
     boolean deleteLogin(Customer customer);

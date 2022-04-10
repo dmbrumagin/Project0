@@ -20,7 +20,8 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
-            int customerId = rs.getInt("customer_id");
+            String customerId = rs.getString("customer_id");
+            System.out.println(customerId);
             customer.setCustomerID(customerId);
             return customer;
         } catch (SQLException e) {
@@ -30,12 +31,12 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
     }
 
     @Override
-    public Customer getCustomerById(int customerId) {
+    public Customer getCustomerById(String customerId) {
         try {
             Connection connection = ConnectionUtility.createConnection();
             String sql = "select * from customer where customer_id = ?;";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, customerId);
+            ps.setString(1, customerId);
             ps.execute();
             ResultSet rs = ps.getResultSet();
             rs.next();
@@ -58,7 +59,7 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, customer.getFirstName());
             ps.setString(2, customer.getLastName());
-            ps.setInt(3, customer.getCustomerID());
+            ps.setString(3, customer.getCustomerID());
             ps.execute();
             return customer;
         } catch (SQLException e) {
@@ -69,12 +70,12 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
 
 
     @Override
-    public boolean deleteCustomer(int customerId) {
+    public boolean deleteCustomer(String customerId) {
         try {
             Connection connection = ConnectionUtility.createConnection();
             String sql = "delete from customer where customer_id = ?;";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, customerId);
+            ps.setString(1, customerId);
             ps.execute();
             return true;
         } catch (SQLException e) {
@@ -94,7 +95,7 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, customer.getUsername());
             ps.setString(2, customer.getPassword());
-            ps.setInt(3, customer.getCustomerID());
+            ps.setString(3, customer.getCustomerID());
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
@@ -108,7 +109,7 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
     }
 
     @Override
-    public int getLogin(String username, String password) {
+    public String getLogin(String username, String password) {
         try {
             Connection connection = ConnectionUtility.createConnection();
             String sql = "select * from customer where username = ?;";
@@ -117,17 +118,17 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             ps.execute();
             ResultSet rs = ps.getResultSet();
             rs.next();
-            int customerID = rs.getInt("customer_id");
+            String customerID = rs.getString("customer_id");
             String passwordToCompare = rs.getString("user_password");
             System.out.println(passwordToCompare);
             System.out.println(password);
             if(passwordToCompare.equals(password))
                 return customerID;
-            return -1;
+            return null;
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return -1;
+            return null;
         }
     }
 
@@ -159,7 +160,7 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, customer.getUsername());
             ps.setString(2, customer.getPassword());
-            ps.setInt(3, customer.getCustomerID());
+            ps.setString(3, customer.getCustomerID());
             ps.execute();
             return customer;
         } catch (SQLException e) {
@@ -174,7 +175,7 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             Connection connection = ConnectionUtility.createConnection();
             String sql = "update customer set username = null, user_password = null where customer_id = ?;";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, customer.getCustomerID());
+            ps.setString(1, customer.getCustomerID());
             ps.execute();
             return true;
 

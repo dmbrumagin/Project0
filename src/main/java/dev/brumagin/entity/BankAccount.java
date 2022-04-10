@@ -4,42 +4,42 @@ abstract public class BankAccount{
 
     protected long accountNumber;
     protected double accountBalance;
-    protected int accountHolder;
-    protected int jointAccountHolder;
+    protected String accountHolder;
+    protected String jointAccountHolder;
 
     public BankAccount(){
-        this.accountHolder = 0;
-        this.jointAccountHolder = 0;
+        this.accountHolder = null;
+        this.jointAccountHolder = null;
         this.accountBalance = 0;
         this.accountNumber = 0;
     }
 
-    public BankAccount( int accountHolder){
+    public BankAccount( String accountHolder){
         this.accountHolder= accountHolder;
         this.accountBalance = 0;
         this.accountNumber = 0;
     }
 
-    public BankAccount(int accountHolder, int jointAccountHolder){
+    public BankAccount(String accountHolder, String jointAccountHolder){
         this.accountHolder= accountHolder;
         this.jointAccountHolder = jointAccountHolder;
         this.accountBalance = 0;
         this.accountNumber = 0;
     }
 
-    public int getAccountHolder() {
+    public String getAccountHolder() {
         return accountHolder;
     }
 
-    public void setAccountHolder(int accountHolder) {
+    public void setAccountHolder(String accountHolder) {
         this.accountHolder = accountHolder;
     }
 
-    public int getJointAccountHolder() {
+    public String getJointAccountHolder() {
         return jointAccountHolder;
     }
 
-    public void setJointAccountHolder(int jointAccountHolder) {
+    public void setJointAccountHolder(String jointAccountHolder) {
         this.jointAccountHolder = jointAccountHolder;
     }
 

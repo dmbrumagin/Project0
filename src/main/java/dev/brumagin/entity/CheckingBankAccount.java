@@ -6,12 +6,12 @@ public class CheckingBankAccount extends BankAccount {
         super();
     }
 
-    public CheckingBankAccount(int accountHolder){
+    public CheckingBankAccount(String accountHolder){
         super(accountHolder);
     }
 
 
-    public CheckingBankAccount(int accountHolder, int jointAccountHolder){
+    public CheckingBankAccount(String accountHolder, String jointAccountHolder){
         super(accountHolder,jointAccountHolder);
     }
 

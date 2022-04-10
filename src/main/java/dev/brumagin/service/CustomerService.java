@@ -4,9 +4,9 @@ import dev.brumagin.entity.Customer;
 
 public interface CustomerService {
     Customer createCustomer(String firstName, String lastName);
-    Customer getCustomer(int customerId);
+    Customer getCustomer(String customerId);
     boolean updateName(Customer customer,String firstName,String lastName);
-    boolean deleteCustomer(int customerId);
+    boolean deleteCustomer(String customerId);
     boolean registerNewAccount(Customer customer,String username, String newPassword);
     boolean login(String username);
     Customer login(String username,String password);

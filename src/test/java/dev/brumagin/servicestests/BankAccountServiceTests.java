@@ -21,7 +21,7 @@ public class BankAccountServiceTests {
     @Order(1)
     void create_account(){
         testCustomer = cService.createCustomer("Santa","Claus");
-        testAccount = bankAccountService.createAccount(testCustomer.getCustomerID(),0,'c');
+        testAccount = bankAccountService.createAccount(testCustomer.getCustomerID(),null,'c');
         Assertions.assertNotEquals(0,testAccount.getAccountNumber());
     }
 
@@ -45,11 +45,15 @@ public class BankAccountServiceTests {
     @Order(4)
     void transfer_small(){
         double currentMoney = testAccount.getAccountBalance()+200;
+        // System.out.println(currentMoney);
         testAccount = bankAccountService.deposit(testAccount,200);
-        BankAccount bankAccount = new CheckingBankAccount(testCustomer.getCustomerID(),300);
-        bankAccount = bankAccountService.createAccount(bankAccount.getAccountHolder(),0,'c');
+        BankAccount bankAccount = new CheckingBankAccount(testCustomer.getCustomerID(),null);
+        bankAccount = bankAccountService.createAccount(bankAccount.getAccountHolder(),null,'c');
+
+        System.out.println(testAccount.getAccountBalance());
+        System.out.println(bankAccount.getAccountBalance());
         bankAccountService.transferFunds(testAccount,bankAccount,200);
-        Assertions.assertEquals(500,bankAccount.getAccountBalance());
+        Assertions.assertEquals(200,bankAccount.getAccountBalance());
         Assertions.assertEquals(0,currentMoney-200);
     }
 

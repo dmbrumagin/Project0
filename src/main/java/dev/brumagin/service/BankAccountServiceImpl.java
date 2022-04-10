@@ -16,7 +16,7 @@ public class BankAccountServiceImpl implements BankAccountService{
 
 
     @Override
-    public BankAccount createAccount(int customer, int jointAccount, char cS) {
+    public BankAccount createAccount(String customer, String jointAccount, char cS) {
         if(cS=='c'){
             BankAccount checkingBankAccount = new CheckingBankAccount(customer,jointAccount);
             checkingBankAccount =  bankAccountDAO.createAccount(checkingBankAccount);

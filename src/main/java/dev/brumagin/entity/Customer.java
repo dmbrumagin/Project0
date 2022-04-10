@@ -1,7 +1,7 @@
 package dev.brumagin.entity;
 
 public class Customer {
-    private int customerID = 0;
+    private String customerID = null;
     private String firstName;
     private String lastName;
     private String username;
@@ -39,11 +39,11 @@ public class Customer {
         this.password = password;
     }
 
-    public int getCustomerID() {
+    public String getCustomerID() {
         return customerID;
     }
 
-    public void setCustomerID(int customerID) {
+    public void setCustomerID(String customerID) {
         this.customerID = customerID;
     }
 

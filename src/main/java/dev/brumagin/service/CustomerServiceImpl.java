@@ -29,7 +29,7 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public boolean deleteCustomer(int customerId){
+    public boolean deleteCustomer(String customerId){
         return customerDAO.deleteCustomer(customerId);
     }
 
@@ -56,7 +56,7 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public Customer getCustomer(int customerId) {
+    public Customer getCustomer(String customerId) {
         return customerDAO.getCustomerById(customerId);
     }
 

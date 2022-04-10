@@ -7,7 +7,7 @@ public interface BankAccountDAO {
     BankAccount createAccount(BankAccount bankAccount);
     BankAccount getAccountByNumber(long accountNumber);
     BankAccount updateAccount(BankAccount bankAccount);
-    LinkedList<BankAccount> getAllBankAccounts (int userId);
+    LinkedList<BankAccount> getAllBankAccounts (String userId);
     boolean deleteAccount(long accountNumber);
 
 }
