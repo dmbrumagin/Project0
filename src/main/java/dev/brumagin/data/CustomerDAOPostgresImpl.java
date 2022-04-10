@@ -119,6 +119,8 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             rs.next();
             int customerID = rs.getInt("customer_id");
             String passwordToCompare = rs.getString("user_password");
+            System.out.println(passwordToCompare);
+            System.out.println(password);
             if(passwordToCompare.equals(password))
                 return customerID;
             return -1;

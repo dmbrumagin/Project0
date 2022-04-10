@@ -104,8 +104,8 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public Customer login(String username, String password) {
-        //return customerDAO.getLogin(username,password);
-        return null; //customerDAO.getLogin();
+        System.out.println(customerDAO.getLogin(username,password));
+        return customerDAO.getCustomerById(customerDAO.getLogin(username,password));
     }
 
     @Override
@@ -113,7 +113,7 @@ public class CustomerServiceImpl implements CustomerService{
         boolean passwordAtLeastOneSpecial = false;
         boolean passwordAtLeastOneCapital = false;
         boolean passwordAtLeastOneNumber = false;
-        if(newPassword.length()<10 && newPassword.length()>=20) {
+        if(newPassword.length()<10 || newPassword.length()>=20) {
             return null;
         }
         for(int i=0 ; i<newPassword.length();i++) {
@@ -137,5 +137,6 @@ public class CustomerServiceImpl implements CustomerService{
     public void closeOnlineAccount(Customer customer) {
         customer.setUsername(null);
         customer.setPassword(null);
+        customerDAO.updateLogin(customer);
     }
 }
