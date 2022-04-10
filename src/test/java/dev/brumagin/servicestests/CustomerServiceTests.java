@@ -147,7 +147,7 @@ public class CustomerServiceTests {
     }
     @Test
     void login_with_valid(){
-        String username = "MuffinMan";
+        String username = "MuffinMan2";
         String password = "Blues12345!";
 
         String s1 = "Danny";

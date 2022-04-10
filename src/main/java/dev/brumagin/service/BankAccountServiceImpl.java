@@ -7,6 +7,7 @@ import dev.brumagin.data.CustomerDAOPostgresImpl;
 import dev.brumagin.entity.BankAccount;
 import dev.brumagin.entity.CheckingBankAccount;
 import dev.brumagin.entity.Customer;
+import dev.brumagin.entity.SavingsBankAccount;
 
 public class BankAccountServiceImpl implements BankAccountService{
 
@@ -15,58 +16,49 @@ public class BankAccountServiceImpl implements BankAccountService{
 
 
     @Override
-    public BankAccount createAccount(Customer customer, Customer jointAccount) {
+    public BankAccount createAccount(int customer, int jointAccount, char cS) {
+        if(cS=='c'){
+            BankAccount checkingBankAccount = new CheckingBankAccount(customer,jointAccount);
+            checkingBankAccount =  bankAccountDAO.createAccount(checkingBankAccount);
+            return checkingBankAccount;
+        }
+        else if(cS=='s'){
+            BankAccount savingsBankAccount = new SavingsBankAccount(customer,jointAccount);
+            savingsBankAccount = bankAccountDAO.createAccount(savingsBankAccount);
+            return savingsBankAccount;
+        }
         return null;
     }
 
     @Override
     public BankAccount deposit(BankAccount bankAccount, double moneyToDeposit) {
-        return null;
-    }
-
-    public void deposit(double moneyToDeposit){
-        //accountBalance +=moneyToDeposit;
+        bankAccount.setAccountBalance(bankAccount.getAccountBalance()+moneyToDeposit);
+        bankAccount =bankAccountDAO.updateAccount(bankAccount);
+        return bankAccount;
     }
 
     @Override
-    public boolean withdraw(BankAccount account, double amountToWithdraw) {
+    public boolean withdraw(BankAccount bankAccount, double amountToWithdraw) {
+        if(amountToWithdraw<= bankAccount.getAccountBalance()){
+            bankAccount.setAccountBalance(bankAccount.getAccountBalance()-amountToWithdraw);
+            bankAccountDAO.updateAccount(bankAccount);
+            return  true;
+        }
         return false;
     }
 
     @Override
     public boolean transferFunds(BankAccount origin, BankAccount destination, double moneyToMove) {
-        return false;
-    }
-
-    public boolean withdraw(double amountToWithdraw){
-       /* if(amountToWithdraw <= bankAccount.getAccountBalance()){
-
-            accountBalance-=amountToWithdraw;
-            printBalance();
-
+        if(withdraw(origin,moneyToMove)) {
+            deposit(destination, moneyToMove);
             return true;
         }
-
-        System.out.println("The operation could not be completed.");
-        printBalance();
-        System.out.printf("The amount $%.2f is greater than the available funds.",amountToWithdraw);*/
 
         return false;
     }
 
     public void printBalance(BankAccount account) {
-        System.out.printf("The current balance of checking account #: %d  is $%.2f.%n", account.getAccountNumber(), account.getAccountBalance());
-
-    }
-
-    public boolean transferFunds(BankAccount destination, double moneyToMove) {
-
-        if(withdraw(moneyToMove)){
-            deposit(destination,moneyToMove);
-            return true;
-        }
-
-        return false;
+        System.out.printf("The current balance of account #: %d  is $%.2f.%n", account.getAccountNumber(), account.getAccountBalance());
     }
 
 }

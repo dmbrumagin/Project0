@@ -2,6 +2,7 @@ package dev.brumagin.data;
 
 import dev.brumagin.entity.BankAccount;
 import dev.brumagin.entity.CheckingBankAccount;
+import dev.brumagin.entity.SavingsBankAccount;
 import dev.brumagin.utility.ConnectionUtility;
 import dev.brumagin.utility.LinkedList;
 
@@ -51,7 +52,8 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
 
                 int customer = rs.getInt("account_holder");
                 int joint = rs.getInt("secondary_account_holder");
-                BankAccount account = new CheckingBankAccount(customer, joint, rs.getDouble("account_balance"));
+                BankAccount account = new CheckingBankAccount(customer, joint);
+                account.setAccountBalance(rs.getDouble("account_balance"));
                 account.setAccountNumber(rs.getLong("account_id"));
                 accounts.add(account);
             }
@@ -76,7 +78,8 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
             rs.next();
             int customer = rs.getInt("account_holder");
             int joint = rs.getInt("secondary_account_holder");
-            BankAccount account = new CheckingBankAccount(customer,joint,rs.getDouble("account_balance"));
+            BankAccount account = new CheckingBankAccount(customer,joint);
+            account.setAccountBalance(rs.getDouble("account_balance"));
             account.setAccountNumber(rs.getLong("account_id"));
             return account;
         } catch (SQLException e) {

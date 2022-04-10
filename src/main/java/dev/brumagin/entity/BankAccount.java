@@ -14,22 +14,16 @@ abstract public class BankAccount{
         this.accountNumber = 0;
     }
 
-    public BankAccount(int accountHolder){
-        this.accountHolder = accountHolder;
-        accountBalance = 0;
+    public BankAccount( int accountHolder){
+        this.accountHolder= accountHolder;
+        this.accountBalance = 0;
         this.accountNumber = 0;
     }
 
-    public BankAccount( int accountHolder, double accountBalance){
-        this(accountHolder);
-        this.accountBalance = accountBalance;
-        this.accountNumber = 0;
-    }
-
-    public BankAccount(int accountHolder, int jointAccountHolder, double accountBalance){
-        this(accountHolder);
+    public BankAccount(int accountHolder, int jointAccountHolder){
+        this.accountHolder= accountHolder;
         this.jointAccountHolder = jointAccountHolder;
-        this.accountBalance = accountBalance;
+        this.accountBalance = 0;
         this.accountNumber = 0;
     }
 

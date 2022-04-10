@@ -24,7 +24,7 @@ public class BankAccountDaoTests{
         Customer customer = new Customer("Bob","Evans");
         testCustomer = customerDAO.createCustomer(customer);
 
-        BankAccount account = new CheckingBankAccount(testCustomer.getCustomerID(), 200L);
+        BankAccount account = new CheckingBankAccount(testCustomer.getCustomerID());
         testAccount = bankAccountDAO.createAccount(account);
         Assertions.assertNotEquals( 0,testAccount.getAccountNumber());
     }
@@ -56,7 +56,7 @@ public class BankAccountDaoTests{
     @Order(5)
     void get_all_accounts_by_user_id(){
         Customer customer = new Customer("Bob","Evans");
-        BankAccount account = new CheckingBankAccount(customerDAO.createCustomer(customer).getCustomerID(), 200L);
+        BankAccount account = new CheckingBankAccount(customerDAO.createCustomer(customer).getCustomerID());
         account = bankAccountDAO.createAccount(account);
         int customerId= account.getAccountHolder();
         LinkedList<BankAccount> bankAccountList= bankAccountDAO.getAllBankAccounts(customerId);

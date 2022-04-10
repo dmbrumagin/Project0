@@ -22,9 +22,7 @@ public class BankingApplication {
         welcomeControlFlow();
 
 
-        /*register a new user account with the system (must be secured with a password)
-        login with my existing credentials
-        create at least one account
+        /*
         deposit funds into an account (use doubles, not ints)
         withdraw funds from an account (no overdrafting!)
         view the balance of my account(s) (all balance displays must be in proper currency format)
@@ -45,7 +43,7 @@ public class BankingApplication {
         System.out.println("Welcome to Not A Real Bank Banking inc.\n" +
                 "Please access an account so we can assist you further.");
         System.out.println("Which option would you like to choose?");
-        System.out.println("1. Register a new account.");
+        System.out.println("1. Register a new account/user.");
         System.out.println("2. Login to an existing account.\n");
         System.out.println("Please enter 1 or 2:");
 
@@ -62,20 +60,19 @@ public class BankingApplication {
                 case 2:
                     System.out.println("Please enter the username associated with the account: ");
                     String username = userInput.nextLine();
-                    break;
-                // if(!customerService.login(username))
-                //    dissuadeBruteForce(userInput);
-                // else {
+                 if(!customerService.login(username))
+                   dissuadeBruteForce();
+                 else {
 
-                //    System.out.println("Please enter the password for the account with username: "+ username + ":");
-                //    String password = userInput.nextLine();
+                    System.out.println("Please enter the password for the account with username: "+ username + ":");
+                    String password = userInput.nextLine();
 
-                //Customer customer = customerService.login(username,password);
+                Customer customer = customerService.login(username,password);
+                     System.out.println(customer);
+                 }
 
-                // }
 
-
-                // break;
+                 break;
                 default:
                     System.out.println("You did not enter a valid option.\n" +
                             "Please enter 1 or 2: ");
@@ -91,15 +88,18 @@ public class BankingApplication {
 
     static void registerAccountControlFlow(){
         boolean validInput;
-
+        Customer nullCustomer = new Customer("","");
         do {
             validInput = true;
             System.out.println("You selected to register a new account.");
+
+
             System.out.println("Please enter a your first name: ");
             String firstName = userInput.nextLine();
             System.out.println("Please enter a your last name: ");
             String lastName = userInput.nextLine();
             Customer customer = customerService.createCustomer(firstName,lastName);
+            usernameAndPasswordControlFlow(customer);
             if(customer== null) {
                 validInput = false;
                 continue;
@@ -116,7 +116,7 @@ public class BankingApplication {
                         jointAccountControlFlow(customer);
                         break;
                     case 2:
-                        accountTypeControlFlow(customer,null);
+                        accountTypeControlFlow(customer,nullCustomer);
                         break;
                     default:
                         System.out.println("You did not enter a valid option.\n" +
@@ -130,6 +130,24 @@ public class BankingApplication {
         }while(!validInput);
 
     }
+
+    static void usernameAndPasswordControlFlow(Customer customer){
+
+        boolean validInput;
+        do {
+            validInput=true;
+            System.out.println("Please enter a valid username for the account holder.");
+            System.out.println("A valid username is at least 8 characters, no more than 20 characters, and contains no spaces.");
+            String username = userInput.nextLine();
+            System.out.println("Please enter a valid password for the account holder.");
+            System.out.println("A valid password is at least 10 characters, no more than 20 characters and contains all of the following:\n" +
+                    "An uppercase letter\t A number\t A special character");
+            String password = userInput.nextLine();
+            validInput =customerService.registerNewAccount(customer,username, password);
+
+        }while (!validInput);
+    }
+
     static void jointAccountControlFlow(Customer mainHolder){
         boolean validInput;
 
@@ -146,6 +164,7 @@ public class BankingApplication {
                 validInput = false;
                 continue;
             }
+            usernameAndPasswordControlFlow(jointHolder);
 
             accountTypeControlFlow(mainHolder,jointHolder);
 
@@ -163,10 +182,12 @@ public class BankingApplication {
             validInput=true;
             switch (inputOption) {
                 case 1:
-                    CheckingBankAccount checkingBankAccount = (CheckingBankAccount) bankAccountService.createAccount(mainHolder,jointHolder);
+                    CheckingBankAccount checkingBankAccount = (CheckingBankAccount) bankAccountService.createAccount(mainHolder.getCustomerID(),jointHolder.getCustomerID(),'c');
+                    System.out.println("You successfully created your account.");
                     break;
                 case 2:
-                    SavingsBankAccount savingsBankAccount = (SavingsBankAccount) bankAccountService.createAccount(mainHolder,jointHolder);
+                    SavingsBankAccount savingsBankAccount = (SavingsBankAccount) bankAccountService.createAccount(mainHolder.getCustomerID(),jointHolder.getCustomerID(),'s');
+                    System.out.println("You successfully created your account.");
                     break;
                 default:
                     System.out.println("You did not enter a valid option.\n" +
@@ -175,7 +196,7 @@ public class BankingApplication {
                     break;
             }
         }while (!validInput);
-
+        welcomeControlFlow();
     }
 
 }

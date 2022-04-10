@@ -10,12 +10,9 @@ public class CheckingBankAccount extends BankAccount {
         super(accountHolder);
     }
 
-    public CheckingBankAccount(int accountHolder, double startingDeposit){
-        super(accountHolder,startingDeposit);
-    }
 
-    public CheckingBankAccount(int accountHolder, int jointAccountHolder, double startingDeposit){
-        super(accountHolder,jointAccountHolder,startingDeposit);
+    public CheckingBankAccount(int accountHolder, int jointAccountHolder){
+        super(accountHolder,jointAccountHolder);
     }
 
 }
