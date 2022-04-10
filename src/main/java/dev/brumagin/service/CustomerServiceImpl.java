@@ -35,7 +35,6 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public boolean updateName(Customer customer,String firstName,String lastName) {
-        boolean bool = true;
         if(firstName.equals("")||lastName.equals(""))
             return false;
 
@@ -52,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService{
 
         customer.setFirstName(firstName);
         customer.setLastName(lastName);
-        customer = customerDAO.updateCustomer(customer);
+        customerDAO.updateCustomer(customer);
         return true;
     }
 
@@ -61,27 +60,82 @@ public class CustomerServiceImpl implements CustomerService{
         return customerDAO.getCustomerById(customerId);
     }
 
-    public boolean registerNewOnlineAccount() {
+    public boolean registerNewAccount(Customer customer,String username, String currentPassword) {
+
+        boolean passwordAtLeastOneSpecial = false;
+        boolean passwordAtLeastOneCapital = false;
+        boolean passwordAtLeastOneNumber = false;
+
+        if(username.length()<8 || username.length()>=20) {
+            return false;
+        }
+        if(currentPassword.length()<10 || currentPassword.length()>=20) {
+            return false;
+        }
+        for(int i=0 ; i<username.length();i++) {
+            if (!Character.isDigit(username.charAt(i)) && !Character.isLetter(username.charAt(i))) {
+                return false;
+            }
+        }
+        for(int i=0 ; i<currentPassword.length();i++) {
+            if (Character.isDigit(currentPassword.charAt(i)))
+               passwordAtLeastOneNumber = true;
+            if (Character.isUpperCase(currentPassword.charAt(i)))
+                passwordAtLeastOneCapital = true;
+            if (!Character.isLetterOrDigit(currentPassword.charAt(i)))
+                passwordAtLeastOneSpecial = true;
+        }
+        if(passwordAtLeastOneCapital && passwordAtLeastOneNumber && passwordAtLeastOneSpecial) {
+            customer.setUsername(username);
+            customer.setPassword(currentPassword);
+            customerDAO.updateLogin(customer);
+            return true;
+        }
+
         return false;
+
     }
 
     @Override
     public boolean login(String username) {
-        return false;
+
+        return customerDAO.getLogin(username);
     }
 
     @Override
-    public boolean login(String username, String password) {
-        return false;
+    public Customer login(String username, String password) {
+        //return customerDAO.getLogin(username,password);
+        return null; //customerDAO.getLogin();
     }
 
     @Override
-    public boolean updatePassword(String username, String currentPassword) {
-        return false;
+    public Customer updatePassword(Customer customer, String newPassword) {
+        boolean passwordAtLeastOneSpecial = false;
+        boolean passwordAtLeastOneCapital = false;
+        boolean passwordAtLeastOneNumber = false;
+        if(newPassword.length()<10 && newPassword.length()>=20) {
+            return null;
+        }
+        for(int i=0 ; i<newPassword.length();i++) {
+            if (Character.isDigit(newPassword.charAt(i)))
+                passwordAtLeastOneNumber = true;
+            if (Character.isUpperCase(newPassword.charAt(i)))
+                passwordAtLeastOneCapital = true;
+            if (!Character.isDigit(newPassword.charAt(i)) || !Character.isLetter(newPassword.charAt(i)))
+                passwordAtLeastOneSpecial = true;
+        }
+        if(passwordAtLeastOneCapital && passwordAtLeastOneNumber && passwordAtLeastOneSpecial) {
+            customer.setPassword(newPassword);
+            customerDAO.updateLogin(customer);
+            customer.setPassword(newPassword);
+            return customer;
+        }
+        return null;
     }
 
     @Override
-    public boolean closeOnlineAccount(String username, String password) {
-        return false;
+    public void closeOnlineAccount(Customer customer) {
+        customer.setUsername(null);
+        customer.setPassword(null);
     }
 }

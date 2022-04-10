@@ -5,6 +5,7 @@ import dev.brumagin.data.BankAccountDAOPostgresImpl;
 import dev.brumagin.data.CustomerDAO;
 import dev.brumagin.data.CustomerDAOPostgresImpl;
 import dev.brumagin.entity.BankAccount;
+import dev.brumagin.entity.CheckingBankAccount;
 import dev.brumagin.entity.Customer;
 
 public class BankAccountServiceImpl implements BankAccountService{
@@ -12,13 +13,6 @@ public class BankAccountServiceImpl implements BankAccountService{
     BankAccountDAO bankAccountDAO = new BankAccountDAOPostgresImpl();
     CustomerDAO customerDAO = new CustomerDAOPostgresImpl();
 
-    @Override
-    public BankAccount createAccount(Customer customer) {
-        //  BankAccount account = bankAccountDAO.createAccount();
-
-
-        return null;
-    }
 
     @Override
     public BankAccount createAccount(Customer customer, Customer jointAccount) {

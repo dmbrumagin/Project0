@@ -7,9 +7,9 @@ public interface CustomerService {
     Customer getCustomer(int customerId);
     boolean updateName(Customer customer,String firstName,String lastName);
     boolean deleteCustomer(int customerId);
-    boolean registerNewOnlineAccount();
+    boolean registerNewAccount(Customer customer,String username, String newPassword);
     boolean login(String username);
-    boolean login(String username,String password);
-    boolean updatePassword(String username, String currentPassword);
-    boolean closeOnlineAccount(String username, String password);
+    Customer login(String username,String password);
+    Customer updatePassword(Customer customer, String currentPassword);
+    void closeOnlineAccount(Customer customer);
 }

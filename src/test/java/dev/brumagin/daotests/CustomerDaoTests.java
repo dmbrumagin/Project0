@@ -36,13 +36,14 @@ public class CustomerDaoTests {
     }
 
     @Test
-    @Order(4)
+    @Order(9)
     void delete_customer_by_id(){
         boolean deleted = customerDAO.deleteCustomer(testCustomer.getCustomerID());
         Assertions.assertTrue(deleted);
     }
 
     @Test
+    @Order(4)
     void create_login(){
         testCustomer.setUsername("username4");
         testCustomer.setPassword("passwordTest");
@@ -52,27 +53,27 @@ public class CustomerDaoTests {
 
 
     @Test
-    @Order(2)
+    @Order(5)
     void get_login_from_credential(){
-        int login = customerDAO.getLogin(testCustomer);
+        int login = customerDAO.getLogin(testCustomer.getUsername(),testCustomer.getPassword());
         Assertions.assertNotEquals(-1,login);
     }
     @Test
-    @Order(3)
+    @Order(6)
     void get_login_from_username(){
         boolean login = customerDAO.getLogin(testCustomer.getUsername());
         Assertions.assertTrue(login);
     }
 
     @Test
-    @Order(4)
+    @Order(7)
     void update_login_from_credential(){
         testCustomer.setPassword("passwordChanged");
         Customer customer = customerDAO.updateLogin(testCustomer);
         Assertions.assertEquals("passwordChanged",customer.getPassword());
     }
     @Test
-    @Order(5)
+    @Order(8)
     void delete_login_credentials(){
         boolean login = customerDAO.deleteLogin(testCustomer);
         Assertions.assertTrue(login);

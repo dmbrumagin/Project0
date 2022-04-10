@@ -54,7 +54,6 @@ public class CustomerServiceTests {
 
     }
 
-    @Disabled
     @Test
     void create_login_with_valid_security(){
         String username = "MuffinMan";
@@ -63,10 +62,127 @@ public class CustomerServiceTests {
         String s2 = "Boy";
 
         Customer customer = cService.createCustomer(s1,s2);
-        customer.setUsername(username);
-        customer.setPassword(password);
+        Assertions.assertTrue(cService.registerNewAccount(customer,username,password));
 
-       // LoginCredential createdLogon = loginCredentialDAO.createLogin(logon);
+    }
 
+    @Test
+    void login_invalid_user(){
+        String username = "Muffin";
+        String password = "1234567890";
+
+        String s1 = "Danny";
+        String s2 = "Boy";
+
+        Customer customer = cService.createCustomer(s1,s2);
+        Assertions.assertFalse(cService.registerNewAccount(customer,username,password));
+    }
+
+    @Test
+    void login_invalid_user_big(){
+        String username = "MuffinmanMuffinmanMuffinmanMuffinman";
+        String password = "1234567890";
+
+        String s1 = "Danny";
+        String s2 = "Boy";
+
+        Customer customer = cService.createCustomer(s1,s2);
+        Assertions.assertFalse(cService.registerNewAccount(customer,username,password));
+    }
+    @Test
+    void login_invalid_user_space(){
+        String username = "Muffin Man";
+        String password = "1234567890";
+
+        String s1 = "Danny";
+        String s2 = "Boy";
+
+        Customer customer = cService.createCustomer(s1,s2);
+        Assertions.assertFalse(cService.registerNewAccount(customer,username,password));
+    }
+
+    @Test
+    void login_invalid_password_short(){
+        String username = "MuffinMan";
+        String password = "123456789";
+
+        String s1 = "Danny";
+        String s2 = "Boy";
+
+        Customer customer = cService.createCustomer(s1,s2);
+        Assertions.assertFalse(cService.registerNewAccount(customer,username,password));
+    }
+    @Test
+    void login_invalid_password_no_cap(){
+        String username = "MuffinMan";
+        String password = "blue#12345";
+
+        String s1 = "Danny";
+        String s2 = "Boy";
+
+        Customer customer = cService.createCustomer(s1,s2);
+        Assertions.assertFalse(cService.registerNewAccount(customer,username,password));
+    }
+    @Test
+    void login_invalid_password_no_num(){
+        String username = "MuffinMan";
+        String password = "Blue#abcde";
+
+        String s1 = "Danny";
+        String s2 = "Boy";
+
+        Customer customer = cService.createCustomer(s1,s2);
+        Assertions.assertFalse(cService.registerNewAccount(customer,username,password));
+    }
+    @Test
+    void login_invalid_password_no_special(){
+        String username = "MuffinMan";
+        String password = "Blues12345";
+
+        String s1 = "Danny";
+        String s2 = "Boy";
+
+        Customer customer = cService.createCustomer(s1,s2);
+        Assertions.assertFalse(cService.registerNewAccount(customer,username,password));
+    }
+    @Test
+    void login_with_valid(){
+        String username = "MuffinMan";
+        String password = "Blues12345!";
+
+        String s1 = "Danny";
+        String s2 = "Boy";
+
+        Customer customer = cService.createCustomer(s1,s2);
+        cService.registerNewAccount(customer,username,password);
+        Assertions.assertEquals(customer.getCustomerID(),cService.login(username,password).getCustomerID());
+    }
+    @Test
+    void update_logon(){
+        String username = "MuffinMan";
+        String password = "Blues12345!";
+
+        String s1 = "Danny";
+        String s2 = "Boy";
+
+        Customer customer = cService.createCustomer(s1,s2);
+        cService.registerNewAccount(customer,username,password);
+
+       customer =  cService.updatePassword(customer,"RedsMuffin1234!");
+        Assertions.assertEquals("RedsMuffin1234!",cService.getCustomer(customer.getCustomerID()).getPassword());
+    }
+
+    @Test
+    void delete_logon(){
+        String username = "MuffinMan";
+        String password = "Blues12345!";
+
+        String s1 = "Danny";
+        String s2 = "Boy";
+
+        Customer customer = cService.createCustomer(s1,s2);
+        cService.registerNewAccount(customer,username,password);
+        cService.closeOnlineAccount(customer);
+        Assertions.assertEquals(null,cService.getCustomer(customer.getCustomerID()).getUsername());
     }
 }

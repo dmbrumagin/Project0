@@ -40,6 +40,8 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             ResultSet rs = ps.getResultSet();
             rs.next();
             Customer customer = new Customer(rs.getString("first_name"), rs.getString("last_name"));
+            customer.setPassword(rs.getString("user_password"));
+            customer.setUsername(rs.getString("username"));
             customer.setCustomerID(customerId);
             return customer;
         } catch (SQLException e) {
@@ -87,7 +89,7 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
 
         try {
             Connection connection = ConnectionUtility.createConnection();
-            String sql = "insert into customer (username,user_password) values(?,?) where user_id = ?;";
+            String sql = "update customer set username = ?,user_password = ? where customer_id = ?;";
 
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, customer.getUsername());
@@ -106,39 +108,40 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
     }
 
     @Override
-    public int getLogin(Customer customer) {
-        System.out.println(customer);
+    public int getLogin(String username, String password) {
         try {
-
             Connection connection = ConnectionUtility.createConnection();
-            String sql = "select *  from customer where user_id = ?;";
+            String sql = "select * from customer where username = ?;";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, customer.getCustomerID());
-
-            ResultSet rs = ps.executeQuery();
+            ps.setString(1, username);
+            ps.execute();
+            ResultSet rs = ps.getResultSet();
             rs.next();
-            //TODO
-            //LoginCredential login = new LoginCredential();
-            // login.setUsername(rs.getString("username"));
-            //login.setPassword(rs.getString("user_password"));
-            return rs.getInt("user_id");
+            int customerID = rs.getInt("customer_id");
+            String passwordToCompare = rs.getString("user_password");
+            if(passwordToCompare.equals(password))
+                return customerID;
+            return -1;
+
         } catch (SQLException e) {
             e.printStackTrace();
             return -1;
         }
     }
 
+
     @Override
     public boolean getLogin(String username) {
         try {
             Connection connection = ConnectionUtility.createConnection();
-            String sql = "select username from customer where username = ?;";
+            String sql = "select * from customer where username = ?;";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, username);
             ps.execute();
             ResultSet rs = ps.getResultSet();
             rs.next();
-            return username.equals(rs.getString("username"));
+            String returnString = rs.getString("username");
+            return username.equals(returnString);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -150,7 +153,7 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
     public Customer updateLogin(Customer customer) {
         try {
             Connection connection = ConnectionUtility.createConnection();
-            String sql = "update logincredential set  username = ?, user_password = ? where login_id = ?;";
+            String sql = "update customer set  username = ?, user_password = ? where customer_id = ?;";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, customer.getUsername());
             ps.setString(2, customer.getPassword());
@@ -167,7 +170,7 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
     public boolean deleteLogin(Customer customer) {
         try {
             Connection connection = ConnectionUtility.createConnection();
-            String sql = "delete from logincredential where login_id = ?;";
+            String sql = "update customer set username = null, user_password = null where customer_id = ?;";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, customer.getCustomerID());
             ps.execute();
@@ -179,5 +182,7 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
         }
     }
 }
+
+
 
 

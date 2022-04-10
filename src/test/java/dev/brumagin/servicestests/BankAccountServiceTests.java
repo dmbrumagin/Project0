@@ -20,7 +20,7 @@ public class BankAccountServiceTests {
     @Order(1)
     void create_account(){
         testCustomer = cService.createCustomer("Santa","Claus");
-        testAccount = bankAccountService.createAccount(testCustomer);
+        testAccount = bankAccountService.createAccount(testCustomer,null);
         Assertions.assertNotEquals(0,testAccount.getAccountNumber());
     }
 

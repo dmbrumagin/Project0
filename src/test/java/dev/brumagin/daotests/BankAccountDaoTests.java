@@ -16,14 +16,15 @@ public class BankAccountDaoTests{
     static CustomerDAO customerDAO = new CustomerDAOPostgresImpl();
     static BankAccountDAO bankAccountDAO = new BankAccountDAOPostgresImpl();
     static BankAccount testAccount;
-    static BankAccount secondaryAccount;
+    static Customer testCustomer;
 
     @Test
     @Order(1)
     void create_account(){
         Customer customer = new Customer("Bob","Evans");
+        testCustomer = customerDAO.createCustomer(customer);
 
-        BankAccount account = new CheckingBankAccount(customerDAO.createCustomer(customer).getCustomerID(), 200L);
+        BankAccount account = new CheckingBankAccount(testCustomer.getCustomerID(), 200L);
         testAccount = bankAccountDAO.createAccount(account);
         Assertions.assertNotEquals( 0,testAccount.getAccountNumber());
     }
@@ -42,11 +43,12 @@ public class BankAccountDaoTests{
         Assertions.assertEquals(testAccount.getAccountNumber(),account.getAccountNumber());
     }
 
-    @Disabled
     @Test
     @Order(4)
     void delete_account_by_id(){
+
         boolean deleted = bankAccountDAO.deleteAccount(testAccount.getAccountNumber());
+        customerDAO.deleteCustomer(testCustomer.getCustomerID());
         Assertions.assertTrue(deleted);
     }
 
