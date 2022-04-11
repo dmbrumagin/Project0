@@ -1,7 +1,9 @@
 package dev.brumagin.utility;
 
 
-public class LinkedList<T> implements List{
+import java.util.Iterator;
+
+public class LinkedList<T> implements List, Iterable<T> {
 
     Node first;
     Node last;
@@ -70,4 +72,41 @@ public class LinkedList<T> implements List{
     public int size() {
         return size;
     }
+
+    @Override
+    public Iterator iterator(Iterable iterate) {
+        return iterator();
+    }
+
+
+    @Override
+    public Iterator<T> iterator() {
+
+        Iterator<T> it = new Iterator<T>()
+        {
+            private Node currentIndex = null;
+
+            @Override
+            public boolean hasNext()
+            {
+                if(currentIndex!=null)
+                    return currentIndex.next != null;
+
+                else{
+                    return first != null;
+                }
+            }
+            @Override
+            public T next()
+            {
+                if(currentIndex==null){
+                    currentIndex=first;
+                    return (T) first.getElement();}
+                currentIndex = currentIndex.next;
+                return (T)currentIndex.getElement();
+            }
+        };
+        return it;
+    }
+
 }

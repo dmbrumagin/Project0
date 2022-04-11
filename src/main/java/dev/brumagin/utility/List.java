@@ -1,5 +1,7 @@
 package dev.brumagin.utility;
 
+import java.util.Iterator;
+
 public interface List <T>{
 
     void add(T elementToAdd);
@@ -8,4 +10,5 @@ public interface List <T>{
     T getElement(int i);
     int size();
 
+    abstract Iterator iterator(Iterable iterate);
 }

@@ -1,12 +1,18 @@
 package dev.brumagin.service;
 
+import dev.brumagin.data.BankAccountDAO;
+import dev.brumagin.data.BankAccountDAOPostgresImpl;
 import dev.brumagin.data.CustomerDAO;
 import dev.brumagin.data.CustomerDAOPostgresImpl;
+import dev.brumagin.entity.BankAccount;
 import dev.brumagin.entity.Customer;
+import dev.brumagin.utility.LinkedList;
+import dev.brumagin.utility.List;
 
 public class CustomerServiceImpl implements CustomerService{
 
     CustomerDAO customerDAO = new CustomerDAOPostgresImpl();
+    BankAccountDAO bankAccountDAO = new BankAccountDAOPostgresImpl();
 
     @Override
     public Customer createCustomer(String firstName, String lastName) {
@@ -106,6 +112,8 @@ public class CustomerServiceImpl implements CustomerService{
     public Customer login(String username, String password) {
         return customerDAO.getCustomerById(customerDAO.getLogin(username,password));
     }
+
+
 
     @Override
     public Customer updatePassword(Customer customer, String newPassword) {

@@ -56,7 +56,7 @@ public class CustomerDaoTests {
     @Order(5)
     void get_login_from_credential(){
         String login = customerDAO.getLogin(testCustomer.getUsername(),testCustomer.getPassword());
-        Assertions.assertNotEquals(-1,login);
+        Assertions.assertNotEquals(null,login);
     }
     @Test
     @Order(6)

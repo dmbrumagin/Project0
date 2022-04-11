@@ -8,6 +8,7 @@ import dev.brumagin.entity.BankAccount;
 import dev.brumagin.entity.CheckingBankAccount;
 import dev.brumagin.entity.Customer;
 import dev.brumagin.entity.SavingsBankAccount;
+import dev.brumagin.utility.LinkedList;
 
 public class BankAccountServiceImpl implements BankAccountService{
 
@@ -24,7 +25,7 @@ public class BankAccountServiceImpl implements BankAccountService{
         }
         else if(cS=='s'){
             BankAccount savingsBankAccount = new SavingsBankAccount(customer,jointAccount);
-            savingsBankAccount = bankAccountDAO.createAccount(savingsBankAccount,'c');
+            savingsBankAccount = bankAccountDAO.createAccount(savingsBankAccount,'s');
             return savingsBankAccount;
         }
         return null;
@@ -55,6 +56,25 @@ public class BankAccountServiceImpl implements BankAccountService{
         }
 
         return false;
+    }
+    @Override
+    public LinkedList<BankAccount> getAllAccounts(String customerId) {
+        return bankAccountDAO.getAllBankAccounts(customerId);
+    }
+
+    @Override
+    public boolean isAccount(long accountId) {
+        return bankAccountDAO.getAccountByNumber(accountId)!=null;
+    }
+
+    @Override
+    public BankAccount getAccount(long accountId){
+        return bankAccountDAO.getAccountByNumber(accountId);
+    }
+
+    @Override
+    public BankAccount updateAccount(BankAccount account){
+       return bankAccountDAO.updateAccount(account);
     }
 
     public void printBalance(BankAccount account) {

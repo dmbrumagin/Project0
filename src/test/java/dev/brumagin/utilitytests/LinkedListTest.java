@@ -70,4 +70,19 @@ public class LinkedListTest {
         Assertions.assertEquals(linkedList.getElement(1),test);
     }
 
+    @Test
+    void linked_list_iterable_has_next(){
+        LinkedList<String> linkedList = new LinkedList<>();
+        String test = "stringToReturn";
+        linkedList.add("FirstEntry");
+        linkedList.add("SecondEntry");
+        linkedList.add("ThirdEntry");
+        linkedList.add("FourthEntry");
+        System.out.println(linkedList);
+        for (String s : linkedList){
+            System.out.println(s);
+            System.out.println(linkedList.size());
+        }
+    }
+
 }

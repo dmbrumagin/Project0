@@ -53,10 +53,13 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
             LinkedList<BankAccount> accounts = new LinkedList<>();
             while(rs.next()) {
 
-
+                BankAccount account = null;
                 String customer = rs.getString("account_holder");
                 String joint = rs.getString("secondary_account_holder");
-                BankAccount account = new CheckingBankAccount(customer, joint);
+                if(rs.getString("account_type").equals("Checking"))
+                    account = new CheckingBankAccount(customer, joint);
+                else if(rs.getString("account_type").equals("Savings"))
+                    account = new SavingsBankAccount(customer, joint);
                 account.setAccountBalance(rs.getDouble("account_balance"));
                 account.setAccountNumber(rs.getLong("account_id"));
                 account.setAccountType(rs.getString("account_type"));

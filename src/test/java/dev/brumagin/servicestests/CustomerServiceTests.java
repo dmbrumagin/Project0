@@ -189,4 +189,11 @@ public class CustomerServiceTests {
         cService.closeOnlineAccount(customer);
         Assertions.assertEquals(null,cService.getCustomer(customer.getCustomerID()).getUsername());
     }
+
+    @Test
+    void delete_customer(){
+        String s = testCustomer.getCustomerID();
+        cService.deleteCustomer(testCustomer.getCustomerID());
+        Assertions.assertNull(cService.getCustomer(s));
+    }
 }

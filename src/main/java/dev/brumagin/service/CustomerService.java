@@ -1,6 +1,8 @@
 package dev.brumagin.service;
 
+import dev.brumagin.entity.BankAccount;
 import dev.brumagin.entity.Customer;
+import dev.brumagin.utility.LinkedList;
 
 public interface CustomerService {
     Customer createCustomer(String firstName, String lastName);
@@ -10,6 +12,7 @@ public interface CustomerService {
     boolean registerNewAccount(Customer customer,String username, String newPassword);
     boolean login(String username);
     Customer login(String username,String password);
+
     Customer updatePassword(Customer customer, String currentPassword);
     void closeOnlineAccount(Customer customer);
 }

@@ -71,12 +71,9 @@ abstract public class BankAccount{
 
     @Override
     public String toString() {
-        return "BankAccount{" +
-                "accountNumber=" + accountNumber +
-                ", accountBalance=" + accountBalance +
-                ", accountHolder='" + accountHolder + '\'' +
-                ", jointAccountHolder='" + jointAccountHolder + '\'' +
-                ", accountType='" + accountType + '\'' +
-                '}';
+        return "BankAccount: " +
+                "accountNumber: " + accountNumber +
+                "-- accountBalance: " + accountBalance +
+                "-- accountType: '" + accountType + '\'';
     }
 }
