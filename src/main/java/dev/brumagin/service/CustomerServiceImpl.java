@@ -104,7 +104,6 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public Customer login(String username, String password) {
-        System.out.println(customerDAO.getLogin(username,password));
         return customerDAO.getCustomerById(customerDAO.getLogin(username,password));
     }
 

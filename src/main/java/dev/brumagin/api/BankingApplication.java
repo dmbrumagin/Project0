@@ -9,6 +9,7 @@ import dev.brumagin.service.BankAccountServiceImpl;
 import dev.brumagin.service.CustomerService;
 import dev.brumagin.service.CustomerServiceImpl;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class BankingApplication {
@@ -47,7 +48,15 @@ public class BankingApplication {
         boolean validInput;
         do {
             validInput = true;
-            int inputOption = userInput.nextInt();
+            int inputOption=0;
+            input:
+            try {
+                inputOption = userInput.nextInt();
+            }
+            catch (InputMismatchException e){
+                System.out.println("You did not enter a proper argument.");
+                break input;
+            }
             userInput.nextLine();
 
             switch (inputOption) {
@@ -99,7 +108,15 @@ public class BankingApplication {
             }
             System.out.println("Would you like to open this account with someone else? ");
             System.out.println("Please enter 1 for 'Yes' and 2 for 'No'");
-            int inputOption = userInput.nextInt();
+            int inputOption=0;
+            input:
+            try {
+                inputOption = userInput.nextInt();
+            }
+            catch (InputMismatchException e){
+                System.out.println("You did not enter a proper argument");
+                break input;
+            }
             userInput.nextLine();
 
             do {
@@ -173,18 +190,28 @@ public class BankingApplication {
         boolean validInput;
         System.out.println("Would you like to open a Checking or Savings Account? ");
         System.out.println("Please enter 1 for 'Checking' and 2 for 'Savings'");
-        int inputOption = userInput.nextInt();
+
+        int inputOption=0;
+        input:
+        try {
+            inputOption = userInput.nextInt();
+        }
+        catch (InputMismatchException e){
+            System.out.println("You did not enter a proper argument.");
+            break input;
+        }
+
         userInput.nextLine();
         do {
             validInput=true;
             switch (inputOption) {
                 case 1:
                     bankAccountService.createAccount(mainHolder.getCustomerID(),jointHolder.getCustomerID(),'c');
-                    System.out.println("You successfully created your account.\n\n");
+                    System.out.println("You successfully created your account.\n");
                     break;
                 case 2:
                     bankAccountService.createAccount(mainHolder.getCustomerID(),jointHolder.getCustomerID(),'s');
-                    System.out.println("You successfully created your account.\n\n");
+                    System.out.println("You successfully created your account.\n");
                     break;
                 default:
                     System.out.println("You did not enter a valid option.\n" +

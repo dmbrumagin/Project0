@@ -45,13 +45,10 @@ public class BankAccountServiceTests {
     @Order(4)
     void transfer_small(){
         double currentMoney = testAccount.getAccountBalance()+200;
-        // System.out.println(currentMoney);
         testAccount = bankAccountService.deposit(testAccount,200);
         BankAccount bankAccount = new CheckingBankAccount(testCustomer.getCustomerID(),null);
         bankAccount = bankAccountService.createAccount(bankAccount.getAccountHolder(),null,'c');
 
-        System.out.println(testAccount.getAccountBalance());
-        System.out.println(bankAccount.getAccountBalance());
         bankAccountService.transferFunds(testAccount,bankAccount,200);
         Assertions.assertEquals(200,bankAccount.getAccountBalance());
         Assertions.assertEquals(0,currentMoney-200);

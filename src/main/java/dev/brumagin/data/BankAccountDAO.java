@@ -4,7 +4,7 @@ import dev.brumagin.entity.BankAccount;
 import dev.brumagin.utility.LinkedList;
 
 public interface BankAccountDAO {
-    BankAccount createAccount(BankAccount bankAccount);
+    BankAccount createAccount(BankAccount bankAccount, char accountType);
     BankAccount getAccountByNumber(long accountNumber);
     BankAccount updateAccount(BankAccount bankAccount);
     LinkedList<BankAccount> getAllBankAccounts (String userId);

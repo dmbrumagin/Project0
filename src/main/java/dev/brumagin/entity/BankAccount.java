@@ -7,6 +7,16 @@ abstract public class BankAccount{
     protected String accountHolder;
     protected String jointAccountHolder;
 
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    protected String accountType;
+
     public BankAccount(){
         this.accountHolder = null;
         this.jointAccountHolder = null;
@@ -62,10 +72,11 @@ abstract public class BankAccount{
     @Override
     public String toString() {
         return "BankAccount{" +
-                "accountHolder=" + accountHolder +
-                ", jointAccountHolder=" + jointAccountHolder +
+                "accountNumber=" + accountNumber +
                 ", accountBalance=" + accountBalance +
-                ", accountNumber=" + accountNumber +
+                ", accountHolder='" + accountHolder + '\'' +
+                ", jointAccountHolder='" + jointAccountHolder + '\'' +
+                ", accountType='" + accountType + '\'' +
                 '}';
     }
 }

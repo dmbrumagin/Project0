@@ -19,12 +19,12 @@ public class BankAccountServiceImpl implements BankAccountService{
     public BankAccount createAccount(String customer, String jointAccount, char cS) {
         if(cS=='c'){
             BankAccount checkingBankAccount = new CheckingBankAccount(customer,jointAccount);
-            checkingBankAccount =  bankAccountDAO.createAccount(checkingBankAccount);
+            checkingBankAccount =  bankAccountDAO.createAccount(checkingBankAccount,'c');
             return checkingBankAccount;
         }
         else if(cS=='s'){
             BankAccount savingsBankAccount = new SavingsBankAccount(customer,jointAccount);
-            savingsBankAccount = bankAccountDAO.createAccount(savingsBankAccount);
+            savingsBankAccount = bankAccountDAO.createAccount(savingsBankAccount,'c');
             return savingsBankAccount;
         }
         return null;
@@ -58,7 +58,7 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
     public void printBalance(BankAccount account) {
-        System.out.printf("The current balance of account #: %d  is $%.2f.%n", account.getAccountNumber(), account.getAccountBalance());
+        System.out.printf("The current balance of %s account #: %d  is $%.2f.%n",account.getAccountType(), account.getAccountNumber(), account.getAccountBalance());
     }
 
 }

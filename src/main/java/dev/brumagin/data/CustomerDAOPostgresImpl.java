@@ -21,7 +21,6 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
             String customerId = rs.getString("customer_id");
-            System.out.println(customerId);
             customer.setCustomerID(customerId);
             return customer;
         } catch (SQLException e) {
@@ -120,8 +119,6 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             rs.next();
             String customerID = rs.getString("customer_id");
             String passwordToCompare = rs.getString("user_password");
-            System.out.println(passwordToCompare);
-            System.out.println(password);
             if(passwordToCompare.equals(password))
                 return customerID;
             return null;

@@ -10,14 +10,22 @@ import java.sql.*;
 
 public class BankAccountDAOPostgresImpl implements BankAccountDAO {
     @Override
-    public BankAccount createAccount(BankAccount bankAccount) {
+    public BankAccount createAccount(BankAccount bankAccount,char accountType) {
        try {
            Connection connection = ConnectionUtility.createConnection();
-           String sql = "insert into account(account_balance,account_holder,secondary_account_holder) values(?,?,?);";
+           String sql = "insert into account(account_balance,account_type,account_holder,secondary_account_holder) values(?,?,?,?);";
            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
            ps.setDouble(1,bankAccount.getAccountBalance());
-           ps.setString(2,bankAccount.getAccountHolder());
-           ps.setString(3,bankAccount.getJointAccountHolder());
+           if(accountType=='c') {
+               ps.setString(2, "Checking");
+               bankAccount.setAccountType("Checking");
+           }
+           else if(accountType=='s') {
+               ps.setString(2, "Savings");
+               bankAccount.setAccountType("Savings");
+           }
+           ps.setString(3,bankAccount.getAccountHolder());
+           ps.setString(4,bankAccount.getJointAccountHolder());
            ps.execute();
            ResultSet rs = ps.getGeneratedKeys();
 
@@ -51,6 +59,7 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
                 BankAccount account = new CheckingBankAccount(customer, joint);
                 account.setAccountBalance(rs.getDouble("account_balance"));
                 account.setAccountNumber(rs.getLong("account_id"));
+                account.setAccountType(rs.getString("account_type"));
                 accounts.add(account);
             }
 
@@ -77,6 +86,7 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
             BankAccount account = new CheckingBankAccount(customer,joint);
             account.setAccountBalance(rs.getDouble("account_balance"));
             account.setAccountNumber(rs.getLong("account_id"));
+            account.setAccountType(rs.getString("account_type"));
             return account;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,12 +98,15 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
     public BankAccount updateAccount(BankAccount bankAccount) {
         try {
             Connection connection = ConnectionUtility.createConnection();
-            String sql = "update account set  account_balance = ?, account_holder = ?, secondary_account_holder = ? where account_id = ?;";
+            String sql = "update account set  account_balance = ?, account_holder = ?, secondary_account_holder = ? ,account_type = ? where account_id = ?;";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setDouble(1,bankAccount.getAccountBalance());
             ps.setString(2,bankAccount.getAccountHolder());
             ps.setString(3,bankAccount.getJointAccountHolder());
-            ps.setLong(4,bankAccount.getAccountNumber());
+
+            ps.setString(4,bankAccount.getAccountType());
+            ps.setLong(5,bankAccount.getAccountNumber());
+
             ps.execute();
             return bankAccount;
         } catch (SQLException e) {
