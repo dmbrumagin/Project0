@@ -10,5 +10,5 @@ public interface List <T>{
     T getElement(int i);
     int size();
 
-    abstract Iterator iterator(Iterable iterate);
+    Iterator iterator(Iterable iterate);
 }

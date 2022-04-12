@@ -7,7 +7,6 @@ import dev.brumagin.service.BankAccountServiceImpl;
 import dev.brumagin.service.CustomerService;
 import dev.brumagin.service.CustomerServiceImpl;
 import dev.brumagin.utility.LinkedList;
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -23,19 +22,7 @@ public class BankingApplication {
                 "Please access an account so we can assist you further.");
         welcomeControlFlow();
 
-
-        /*
-        deposit funds into an account (use doubles, not ints)
-        withdraw funds from an account (no overdrafting!)
-        view the balance of my account(s) (all balance displays must be in proper currency format)
-        Suggested Bonus User Stories
-        As a user I can:
-
-        view the transaction history for an account
-        create multiple accounts per user (checking, savings, etc.)
-        share a joint account with another user
-        transfer money between accounts*/
-
+       /*TODO view the transaction history for an account*/
 
     }
     static void welcomeControlFlow(){
@@ -53,17 +40,17 @@ public class BankingApplication {
                 inputOption = userInput.nextInt();
             }
             catch (InputMismatchException e){
-                System.out.println("You did not enter a proper argument.");
+                System.out.println("You did not enter a number.");
                 break input;
             }
             userInput.nextLine();
 
             switch (inputOption) {
                 case 1:
-                    registerAccountControlFlow();
+                    createAccountControlFlow();
                     break;
                 case 2:
-                    login();
+                    login(false);
                     break;
                 default:
                     System.out.println("You did not enter a valid option.\n" +
@@ -73,29 +60,60 @@ public class BankingApplication {
             }
         }while(!validInput);
     }
-    static Customer login(){
+    static Customer login(boolean customerToReturn){
         Customer customer = null;
         System.out.println("Please enter the username associated with an account: ");
         String username = userInput.nextLine();
         if(!customerService.login(username))
-            dissuadeBruteForce();
+            dissuadeBruteForce(username);
         else {
+            int logonTries = 0;
 
-            System.out.println("Please enter the password for the account with username: "+ username + ":");
-            String password = userInput.next();
+            do {
+                System.out.println("Please enter the password for the account with username: " + username + ":");
+                String password = userInput.next();
 
-            customer = customerService.login(username,password);
-            accountValidControlFlow(customer);
 
+                customer = customerService.login(username, password);
+
+                if(customer!=null)
+                    break;
+                else{
+                    System.out.println("You entered an incorrect password. Please check your records and try again.\n" +
+                            "Passwords are case-sensitive. You have " + (3-logonTries) + " attempts remaining.");
+                    logonTries++;
+                }
+
+            }while (logonTries < 3);
+            if(customer == null){
+                System.out.println("You have used up all your logon attempts.");
+                logout();
+                //TODO lockoutCustomer(customer);
+            }
+            if(!customerToReturn)
+                accountSelectControlFlow(customer);
         }
         return customer;
     }
 
-    static void accountValidControlFlow(Customer customer){
+    static void dissuadeBruteForce(String username) {
+        int logonTries = 0;
+        do {
+            System.out.println("Please enter the password for the account with username: " + username + ":");
+            String password = userInput.next();
+            System.out.println("You entered an incorrect password. Please check your records and try again.\n" +
+                    "Passwords are case-sensitive. You have " + (3 - logonTries) + " attempts remaining.");
+            logonTries++;
+        } while (logonTries < 3);
+        System.out.println("You have used up all your logon attempts.");
+        logout();
+    }
+
+    static void accountSelectControlFlow(Customer customer){
         boolean validInput;
 
-        System.out.println("Please enter what Account Number you would like to access" +
-                "Please enter 0 to create a new account");
+        System.out.println("Please enter what Account Number you would like to access\n" +
+                "Please enter '0' to create a new account.");
         LinkedList<BankAccount> listOfAccounts = bankAccountService.getAllAccounts(customer.getCustomerID());
 
         do {
@@ -108,32 +126,103 @@ public class BankingApplication {
             try {
                 inputOption = userInput.nextLong();
             } catch (InputMismatchException e) {
-                System.out.println("You did not enter a proper argument.");
+                System.out.println("You did not enter a number.");
                 break input;
             }
             if(inputOption==0){
-                registerAccountControlFlow(customer);
+                createAccountControlFlow(customer);
             }
-
             else if (bankAccountService.isAccount(inputOption)) {
-                accountOptionsControlFlow(bankAccountService.getAccount(inputOption));
+                accountOptionsControlFlow(bankAccountService.getAccount(inputOption),customer);//TODO check
             } else {
+                System.out.println("You did not enter an account number. Please try again.");
                 validInput = false;
             }
 
         }while (!validInput);
 
     }
+    static void makeDeposit(BankAccount bankAccount,Customer customer){
+        System.out.println("You selected to make a deposit.");
+        System.out.println("How much would you like to deposit?");
+        double deposit=0;
+        input:
+        try {
+            deposit = userInput.nextDouble();
+            userInput.nextLine();
+        }
+        catch (InputMismatchException e){
+            System.out.println("You did not enter a number.");
+            break input;
+        }
+        bankAccountService.deposit(bankAccount,deposit);
+        bankAccountService.printBalance(bankAccount);
+        accountOptionsControlFlow(bankAccount,customer);
+    }
+    static void makeWithdrawal(BankAccount bankAccount,Customer customer){
+        System.out.println("You selected to make a withdrawal.");
+        System.out.println("How much would you like to withdraw?");
+        double withdrawal=0;
+        input:
+        try {
+            withdrawal = userInput.nextDouble();
+            userInput.nextLine();
+        }
+        catch (InputMismatchException e){
+            System.out.println("You did not enter a number.");
+            break input;
+        }
+        bankAccountService.withdraw(bankAccount,withdrawal);
+        bankAccountService.printBalance(bankAccount);
+        accountOptionsControlFlow(bankAccount,customer);
+    }
+    static void transferToAccount(BankAccount origin, Customer customer){
+        System.out.println("You selected to make a transfer.");
+        System.out.println("How much would you like to transfer?");
+        double transfer=0;
+        long accountDestination=0;
+        input:
+        try {
+            transfer = userInput.nextDouble();
+        }
+        catch (InputMismatchException e){
+            System.out.println("You did not enter a proper argument.");
+            break input;
+        }
+        System.out.println("What is the account number you would like to transfer to?");
+        input2:
+        try {
+            accountDestination = userInput.nextLong();
+        }
+        catch (InputMismatchException e){
+            System.out.println("You did not enter a proper argument.");
+            break input2;
+        }
 
-    static void accountOptionsControlFlow(BankAccount bankAccount){
+
+
+
+        if(bankAccountService.getAccount( accountDestination)!= null){
+        bankAccountService.transferFunds(origin, bankAccountService.getAccount(accountDestination),transfer);
+        bankAccountService.printBalance(origin);
+        }
+        else{
+            System.out.println("You entered an invalid account number. Transfer was not completed.");
+            accountOptionsControlFlow(origin,customer);
+        }
+        accountOptionsControlFlow(origin,customer);
+    }
+
+    static void accountOptionsControlFlow(BankAccount bankAccount,Customer customer){
 
         System.out.println("Please enter what you would like to do with the account #:"+bankAccount.getAccountNumber());
-        System.out.println("1.Withdraw from account");
-        System.out.println("2.Deposit to account");
+        System.out.println("1.Deposit to account");
+        System.out.println("2.Withdraw from account");
         System.out.println("3.Make a transfer to another account");
-        System.out.println("4.Change Joint Account Status");
-        System.out.println("5.Show transaction history");
-        boolean validInput = true;
+        System.out.println("4.Show transaction history");
+        System.out.println("5.Go back to account overview.");
+        System.out.println("6.Log Out.");
+
         int inputOption=0;
         input:
         try {
@@ -141,24 +230,30 @@ public class BankingApplication {
             userInput.nextLine();
         }
         catch (InputMismatchException e){
-            System.out.println("You did not enter a proper argument.");
+            System.out.println("You did not enter a number.");
             break input;
         }
+        boolean validInput;
         do {
             validInput=true;
             switch (inputOption) {
                 case 1:
+                    makeDeposit(bankAccount,customer);
                     break;
                 case 2:
+                    makeWithdrawal(bankAccount,customer);
                     break;
                 case 3:
+                    transferToAccount(bankAccount,customer);
                     break;
                 case 4:
-
-                    //TODO
-                    jointAccountWithExistingCustomerUpdate(bankAccount);
+                    //TODO implement Transactions
                     break;
                 case 5:
+                    accountSelectControlFlow(customer);
+                    break;
+                case 6:
+                    logout();
                     break;
                 default:
                     System.out.println("You did not enter a valid option.\n" +
@@ -170,69 +265,86 @@ public class BankingApplication {
 
 
     }
-    static void registerAccountControlFlow(Customer customer){
+    static void logout(){
+        System.out.println("Thank you for using Negative Root Banking. We hope to see you again soon!");
+    }
+    static void createAccountControlFlow(Customer customer) {
         boolean validInput;
-        Customer nullCustomer = new Customer("","");
-        do {
-            validInput = true;
-            System.out.println("You selected to register a new account.");
-
-
-            System.out.println("Would you like to open this account with someone else? ");
-            System.out.println("Please enter 1 for 'Yes' and 2 for 'No'");
-            int inputOption=0;
-            input:
-            try {
-                inputOption = userInput.nextInt();
-            }
-            catch (InputMismatchException e){
-                System.out.println("You did not enter a proper argument");
-                break input;
-            }
+        Customer nullCustomer = new Customer("", "");
+        System.out.println("You selected to register a new account.");
+        System.out.println("Would you like to open this account with someone else? ");
+        System.out.println("Please enter 1 for 'Yes' and 2 for 'No'.");
+        int inputOption = 0;
+        input:
+        try {
+            inputOption = userInput.nextInt();
             userInput.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("You did not enter a number.");
+            break input;
+        }
 
-            do {
-                validInput=true;
-                switch (inputOption) {
-                    case 1:
-                        jointAccountWithExistingCustomerNew(customer);
-                        break;
-                    case 2:
-                        accountTypeControlFlow(customer,nullCustomer);
-                        break;
-                    default:
-                        System.out.println("You did not enter a valid option.\n" +
-                                "Please enter 1 or 2: ");
-                        validInput = false;
-                        break;
-                }
-            }while (!validInput);
-
-
-        }while(!validInput);
-
+        do {
+            validInput = true;
+            switch (inputOption) {
+                case 1:
+                    jointAccountUpdateControlFlow(customer);
+                    break;
+                case 2:
+                    accountTypeControlFlow(customer, nullCustomer);
+                    break;
+                default:
+                    System.out.println("You did not enter a valid option.\n" +
+                            "Please enter 1 or 2: ");
+                    validInput = false;
+                    break;
+            }
+        } while (!validInput);
     }
 
-    static void jointAccountWithExistingCustomerNew(Customer customer){
-        System.out.println("Please enter the login credentials for the Joint Account holder");
-        Customer joint = login();
-        accountTypeControlFlow(customer,joint);
-    }
-    static void jointAccountWithExistingCustomerUpdate(BankAccount bankAccount){
-        System.out.println("Please enter the login credentials for the Joint Account holder");
-        Customer joint = login();
-        bankAccount.setJointAccountHolder(joint.getCustomerID());
-        bankAccountService.updateAccount(bankAccount);
+    static void jointAccountUpdateControlFlow(Customer customer){
+        System.out.println("Is the person you are opening an account with currently a customer? ");
+        System.out.println("Please enter 1 for 'Yes' and 2 for 'No'.");
+        int inputOption=0;
+        input:
+        try {
+            inputOption = userInput.nextInt();
+            userInput.nextLine();
+        }
+        catch (InputMismatchException e){
+            System.out.println("You did not enter a number.");
+            break input;
+        }
+
+        boolean validInput;
+        do {
+            validInput=true;
+            switch (inputOption) {
+                case 1:
+                    System.out.println("Please enter the login credentials for the Joint Account holder.");
+                    Customer joint = login(true);
+                    accountTypeControlFlow(customer,joint);
+
+                    //TODO
+                    break;
+                case 2:
+                    jointAccountControlFlow(customer);
+                    break;
+                default:
+                    System.out.println("You did not enter a valid option.\n" +
+                            "Please enter 1 or 2: ");
+                    validInput = false;
+                    break;
+            }
+        }while (!validInput);
     }
 
-    static void registerAccountControlFlow(){
+    static void createAccountControlFlow(){
         boolean validInput;
         Customer nullCustomer = new Customer("","");
         do {
             validInput = true;
             System.out.println("You selected to register a new account.");
-
-
             System.out.println("Please enter a your first name: ");
             String firstName = userInput.nextLine();
             System.out.println("Please enter a your last name: ");
@@ -275,7 +387,6 @@ public class BankingApplication {
 
 
         }while(!validInput);
-
     }
 
     static void usernameAndPasswordControlFlow(Customer customer){
@@ -294,18 +405,18 @@ public class BankingApplication {
             System.out.println(validInput);
             if(validInput)
                 validInput =customerService.registerNewAccount(customer,username, password);
+            else{
+                //TODO split into username and password validation
+                System.out.println("You did not enter a valid username or password. Please follow the prompts.");
+            }
 
         }while (!validInput);
     }
 
-    static void dissuadeBruteForce(){
 
-    }
 
     static void jointAccountControlFlow(Customer mainHolder){
         boolean validInput;
-
-
         do {
             validInput = true;
             System.out.println("You selected to register a joint account holder.");
@@ -321,6 +432,7 @@ public class BankingApplication {
             usernameAndPasswordControlFlow(jointHolder);
 
             accountTypeControlFlow(mainHolder,jointHolder);
+
 
         }while(!validInput);
 
@@ -360,7 +472,7 @@ public class BankingApplication {
                     break;
             }
         }while (!validInput);
-        welcomeControlFlow();
+        welcomeControlFlow();//TODO
     }
 
 }
