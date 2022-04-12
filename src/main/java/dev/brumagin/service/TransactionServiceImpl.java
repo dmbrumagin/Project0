@@ -25,7 +25,13 @@ public class TransactionServiceImpl implements TransactionService{
 
     @Override
     public LinkedList<Transation> getAllTransactions(long accountNumber){
-        return transactionDAO.getAllTransactions(accountNumber);
+        LinkedList<Transation> transactions = transactionDAO.getAllTransactions(accountNumber);
+
+        for(Transation t : transactions){
+            printTransaction(t);
+        }
+        System.out.println();
+        return transactions;
     }
 
     public void printTransaction(Transation transation){

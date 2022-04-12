@@ -156,7 +156,7 @@ public class BankingApplication {
             break input;
         }
         bankAccountService.deposit(bankAccount,deposit);
-        transactionService.createTransaction(bankAccount.getAccountNumber(),0, TransactionType.DEPOSIT,deposit,System.currentTimeMillis());
+        transactionService.createTransaction(bankAccount.getAccountNumber(),bankAccount.getAccountNumber(), TransactionType.DEPOSIT,deposit,System.currentTimeMillis());
         bankAccountService.printBalance(bankAccount);
         accountOptionsControlFlow(bankAccount,customer);
     }
@@ -174,7 +174,7 @@ public class BankingApplication {
             break input;
         }
         bankAccountService.withdraw(bankAccount,withdrawal);
-        transactionService.createTransaction(bankAccount.getAccountNumber(),0, TransactionType.WITHDRAWAL,withdrawal,System.currentTimeMillis());
+        transactionService.createTransaction(bankAccount.getAccountNumber(),bankAccount.getAccountNumber(), TransactionType.WITHDRAWAL,withdrawal,System.currentTimeMillis());
         bankAccountService.printBalance(bankAccount);
         accountOptionsControlFlow(bankAccount,customer);
     }
@@ -248,6 +248,7 @@ public class BankingApplication {
                     break;
                 case 4:
                     transactionService.getAllTransactions(bankAccount.getAccountNumber());
+                    accountOptionsControlFlow(bankAccount,customer);
                     break;
                 case 5:
                     accountSelectControlFlow(customer,true);
