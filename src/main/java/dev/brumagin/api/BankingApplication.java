@@ -47,10 +47,10 @@ public class BankingApplication {
 
             switch (inputOption) {
                 case 1:
-                    createAccountControlFlow();
+                    createAccountControlFlow(false);
                     break;
                 case 2:
-                    login(false);
+                    login(false, false);
                     break;
                 default:
                     System.out.println("You did not enter a valid option.\n" +
@@ -60,7 +60,7 @@ public class BankingApplication {
             }
         }while(!validInput);
     }
-    static Customer login(boolean customerToReturn){
+    static Customer login(boolean customerToReturn, boolean loggedIn){
         Customer customer = null;
         System.out.println("Please enter the username associated with an account: ");
         String username = userInput.nextLine();
@@ -90,8 +90,9 @@ public class BankingApplication {
                 logout();
                 //TODO lockoutCustomer(customer);
             }
-            if(!customerToReturn)
-                accountSelectControlFlow(customer);
+            if(!customerToReturn ){
+                accountSelectControlFlow(customer,true);
+            }
         }
         return customer;
     }
@@ -109,7 +110,7 @@ public class BankingApplication {
         logout();
     }
 
-    static void accountSelectControlFlow(Customer customer){
+    static void accountSelectControlFlow(Customer customer, boolean loggedIn){
         boolean validInput;
 
         System.out.println("Please enter what Account Number you would like to access\n" +
@@ -130,10 +131,10 @@ public class BankingApplication {
                 break input;
             }
             if(inputOption==0){
-                createAccountControlFlow(customer);
+                createAccountControlFlow(customer,loggedIn);
             }
             else if (bankAccountService.isAccount(inputOption)) {
-                accountOptionsControlFlow(bankAccountService.getAccount(inputOption),customer);//TODO check
+                accountOptionsControlFlow(bankAccountService.getAccount(inputOption),customer);
             } else {
                 System.out.println("You did not enter an account number. Please try again.");
                 validInput = false;
@@ -198,10 +199,6 @@ public class BankingApplication {
             System.out.println("You did not enter a proper argument.");
             break input2;
         }
-
-
-
-
         if(bankAccountService.getAccount( accountDestination)!= null){
         bankAccountService.transferFunds(origin, bankAccountService.getAccount(accountDestination),transfer);
         bankAccountService.printBalance(origin);
@@ -222,6 +219,7 @@ public class BankingApplication {
         System.out.println("4.Show transaction history");
         System.out.println("5.Go back to account overview.");
         System.out.println("6.Log Out.");
+        System.out.println("7.Exit Application");
 
         int inputOption=0;
         input:
@@ -250,11 +248,13 @@ public class BankingApplication {
                     //TODO implement Transactions
                     break;
                 case 5:
-                    accountSelectControlFlow(customer);
+                    accountSelectControlFlow(customer,true);
                     break;
                 case 6:
                     logout();
                     break;
+                case 7:
+                    System.out.println("Thank you for using Negative Root Banking. We hope to see you again soon!");
                 default:
                     System.out.println("You did not enter a valid option.\n" +
                             "Please enter 1 or 2: ");
@@ -266,9 +266,10 @@ public class BankingApplication {
 
     }
     static void logout(){
-        System.out.println("Thank you for using Negative Root Banking. We hope to see you again soon!");
+        System.out.println("You have logged out of your account.\n");
+        welcomeControlFlow();
     }
-    static void createAccountControlFlow(Customer customer) {
+    static void createAccountControlFlow(Customer customer, boolean loggedIn) {
         boolean validInput;
         Customer nullCustomer = new Customer("", "");
         System.out.println("You selected to register a new account.");
@@ -288,10 +289,10 @@ public class BankingApplication {
             validInput = true;
             switch (inputOption) {
                 case 1:
-                    jointAccountUpdateControlFlow(customer);
+                    jointAccountUpdateControlFlow(customer,loggedIn);
                     break;
                 case 2:
-                    accountTypeControlFlow(customer, nullCustomer);
+                    accountTypeControlFlow(customer, nullCustomer,loggedIn);
                     break;
                 default:
                     System.out.println("You did not enter a valid option.\n" +
@@ -302,7 +303,7 @@ public class BankingApplication {
         } while (!validInput);
     }
 
-    static void jointAccountUpdateControlFlow(Customer customer){
+    static void jointAccountUpdateControlFlow(Customer customer,boolean loggedIn){
         System.out.println("Is the person you are opening an account with currently a customer? ");
         System.out.println("Please enter 1 for 'Yes' and 2 for 'No'.");
         int inputOption=0;
@@ -322,13 +323,11 @@ public class BankingApplication {
             switch (inputOption) {
                 case 1:
                     System.out.println("Please enter the login credentials for the Joint Account holder.");
-                    Customer joint = login(true);
-                    accountTypeControlFlow(customer,joint);
-
-                    //TODO
+                    Customer joint = login(true,loggedIn);
+                    accountTypeControlFlow(customer,joint,loggedIn);
                     break;
                 case 2:
-                    jointAccountControlFlow(customer);
+                    jointAccountControlFlow(customer,loggedIn);
                     break;
                 default:
                     System.out.println("You did not enter a valid option.\n" +
@@ -339,7 +338,7 @@ public class BankingApplication {
         }while (!validInput);
     }
 
-    static void createAccountControlFlow(){
+    static void createAccountControlFlow(boolean loggedIn){
         boolean validInput;
         Customer nullCustomer = new Customer("","");
         do {
@@ -372,10 +371,10 @@ public class BankingApplication {
                 validInput=true;
                 switch (inputOption) {
                     case 1:
-                        jointAccountControlFlow(customer);
+                        jointAccountControlFlow(customer,loggedIn);
                         break;
                     case 2:
-                        accountTypeControlFlow(customer,nullCustomer);
+                        accountTypeControlFlow(customer,nullCustomer,loggedIn);
                         break;
                     default:
                         System.out.println("You did not enter a valid option.\n" +
@@ -415,7 +414,7 @@ public class BankingApplication {
 
 
 
-    static void jointAccountControlFlow(Customer mainHolder){
+    static void jointAccountControlFlow(Customer mainHolder,boolean loggedIn){
         boolean validInput;
         do {
             validInput = true;
@@ -431,14 +430,14 @@ public class BankingApplication {
             }
             usernameAndPasswordControlFlow(jointHolder);
 
-            accountTypeControlFlow(mainHolder,jointHolder);
+            accountTypeControlFlow(mainHolder,jointHolder,loggedIn);
 
 
         }while(!validInput);
 
     }
 
-    static void accountTypeControlFlow(Customer mainHolder, Customer jointHolder){
+    static void accountTypeControlFlow(Customer mainHolder, Customer jointHolder, boolean loggedIn){
         boolean validInput;
         System.out.println("Would you like to open a Checking or Savings Account? ");
         System.out.println("Please enter 1 for 'Checking' and 2 for 'Savings'");
@@ -454,6 +453,7 @@ public class BankingApplication {
         }
 
         userInput.nextLine();
+
         do {
             validInput=true;
             switch (inputOption) {
@@ -472,7 +472,11 @@ public class BankingApplication {
                     break;
             }
         }while (!validInput);
-        welcomeControlFlow();//TODO
+        if(!loggedIn)
+            welcomeControlFlow();
+        else{
+            accountSelectControlFlow(mainHolder,true);
+        }
     }
 
 }

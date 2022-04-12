@@ -5,6 +5,8 @@ import dev.brumagin.entity.CheckingBankAccount;
 import dev.brumagin.entity.SavingsBankAccount;
 import dev.brumagin.utility.ConnectionUtility;
 import dev.brumagin.utility.LinkedList;
+import dev.brumagin.utility.LogLevel;
+import dev.brumagin.utility.Logger;
 
 import java.sql.*;
 
@@ -92,6 +94,7 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
             account.setAccountType(rs.getString("account_type"));
             return account;
         } catch (SQLException e) {
+            Logger.log("Invalid sql account id ", LogLevel.WARNING);
             e.printStackTrace();
             return null;
         }
