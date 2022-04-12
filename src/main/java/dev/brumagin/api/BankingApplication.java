@@ -2,10 +2,8 @@ package dev.brumagin.api;
 
 import dev.brumagin.entity.BankAccount;
 import dev.brumagin.entity.Customer;
-import dev.brumagin.service.BankAccountService;
-import dev.brumagin.service.BankAccountServiceImpl;
-import dev.brumagin.service.CustomerService;
-import dev.brumagin.service.CustomerServiceImpl;
+import dev.brumagin.entity.TransactionType;
+import dev.brumagin.service.*;
 import dev.brumagin.utility.LinkedList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -14,6 +12,7 @@ public class BankingApplication {
 
     static CustomerService customerService = new CustomerServiceImpl();
     static BankAccountService bankAccountService = new BankAccountServiceImpl();
+    static TransactionService transactionService = new TransactionServiceImpl();
     static Scanner userInput = new Scanner(System.in);
 
     public static void main (String[] args){
@@ -157,6 +156,7 @@ public class BankingApplication {
             break input;
         }
         bankAccountService.deposit(bankAccount,deposit);
+        transactionService.createTransaction(bankAccount.getAccountNumber(),0, TransactionType.DEPOSIT,deposit,System.currentTimeMillis());
         bankAccountService.printBalance(bankAccount);
         accountOptionsControlFlow(bankAccount,customer);
     }
@@ -174,6 +174,7 @@ public class BankingApplication {
             break input;
         }
         bankAccountService.withdraw(bankAccount,withdrawal);
+        transactionService.createTransaction(bankAccount.getAccountNumber(),0, TransactionType.WITHDRAWAL,withdrawal,System.currentTimeMillis());
         bankAccountService.printBalance(bankAccount);
         accountOptionsControlFlow(bankAccount,customer);
     }
@@ -201,6 +202,7 @@ public class BankingApplication {
         }
         if(bankAccountService.getAccount( accountDestination)!= null){
         bankAccountService.transferFunds(origin, bankAccountService.getAccount(accountDestination),transfer);
+        transactionService.createTransaction(origin.getAccountNumber(),accountDestination, TransactionType.TRANSFER,transfer,System.currentTimeMillis());
         bankAccountService.printBalance(origin);
         }
         else{
@@ -245,7 +247,7 @@ public class BankingApplication {
                     transferToAccount(bankAccount,customer);
                     break;
                 case 4:
-                    //TODO implement Transactions
+                    transactionService.getAllTransactions(bankAccount.getAccountNumber());
                     break;
                 case 5:
                     accountSelectControlFlow(customer,true);

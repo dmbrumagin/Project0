@@ -1,9 +1,8 @@
 package dev.brumagin.data;
 
-import dev.brumagin.entity.Customer;
-import dev.brumagin.entity.TransactionType;
-import dev.brumagin.entity.Transation;
+import dev.brumagin.entity.*;
 import dev.brumagin.utility.ConnectionUtility;
+import dev.brumagin.utility.LinkedList;
 
 import java.sql.*;
 
@@ -85,4 +84,36 @@ public class TransactionDAOPostgressImpl implements TransactionDAO{
             return false;
         }
     }
+
+    @Override
+    public LinkedList<Transation> getAllTransactions(long accountId) {
+        try {
+            Connection connection = ConnectionUtility.createConnection();
+            String sql = "select * from transaction_log where origin_account = ? or destination_account = ?;";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setLong(1,accountId);
+            ps.setLong(2,accountId);
+            ps.execute();
+            ResultSet rs = ps.getResultSet();
+            LinkedList<Transation> transations = new LinkedList<>();
+            while(rs.next()) {
+
+                long transactionId = rs.getLong("transaction_id");
+                long account = rs.getLong("origin_account");
+                long destination = rs.getLong("destination_account");
+                double amount = rs.getDouble("amount_of_transaction");
+                String type = rs.getString("type_of_transaction");
+                long epoch = rs.getLong("time_of_transaction");
+                Transation transation = new Transation(account,destination,amount,TransactionType.valueOf(type),epoch);
+                transations.add(transation);
+            }
+
+            return transations;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 }
