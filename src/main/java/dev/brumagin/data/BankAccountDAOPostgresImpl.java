@@ -36,7 +36,8 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
            bankAccount.setAccountNumber(bankAccountId);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+           Logger.log("Issue with Bank Account: "+bankAccount.getAccountHolder() + " Account type: "+accountType,LogLevel.WARNING);
+            //e.printStackTrace();
             return null;
         }
 
@@ -70,7 +71,8 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
 
             return accounts;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Username not found: "+userId,LogLevel.WARNING);
+            //e.printStackTrace();
             return null;
         }
     }
@@ -94,8 +96,8 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
             account.setAccountType(rs.getString("account_type"));
             return account;
         } catch (SQLException e) {
-            Logger.log("Invalid sql account id ", LogLevel.WARNING);
-            e.printStackTrace();
+            Logger.log("Account Number not found: "+accountNumber,LogLevel.WARNING);
+            //e.printStackTrace();
             return null;
         }
     }
@@ -116,7 +118,8 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
             ps.execute();
             return bankAccount;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Bank Account Id not found: "+bankAccount.getAccountNumber(),LogLevel.WARNING);
+            //e.printStackTrace();
             return null;
         }
     }
@@ -131,7 +134,8 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
             ps.execute();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Account Number not found: "+accountNumber,LogLevel.WARNING);
+            //e.printStackTrace();
             return false;
         }
     }

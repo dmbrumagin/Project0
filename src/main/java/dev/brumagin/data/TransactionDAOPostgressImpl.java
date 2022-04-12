@@ -3,6 +3,8 @@ package dev.brumagin.data;
 import dev.brumagin.entity.*;
 import dev.brumagin.utility.ConnectionUtility;
 import dev.brumagin.utility.LinkedList;
+import dev.brumagin.utility.LogLevel;
+import dev.brumagin.utility.Logger;
 
 import java.sql.*;
 
@@ -25,7 +27,8 @@ public class TransactionDAOPostgressImpl implements TransactionDAO{
             transation.setTransactionId(transactionId);
             return transation;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Transaction not found: "+transation, LogLevel.WARNING);
+            //e.printStackTrace();
             return null;
         }
     }
@@ -45,7 +48,8 @@ public class TransactionDAOPostgressImpl implements TransactionDAO{
 
             return transation;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Transaction Id not found: "+transactionId, LogLevel.WARNING);
+            //e.printStackTrace();
             return null;
         }
     }
@@ -65,7 +69,8 @@ public class TransactionDAOPostgressImpl implements TransactionDAO{
             ps.execute();
             return transation;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Transaction not found: "+transation, LogLevel.WARNING);
+            // e.printStackTrace();
             return null;
         }
     }
@@ -80,7 +85,8 @@ public class TransactionDAOPostgressImpl implements TransactionDAO{
             ps.execute();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Transaction Id not found: "+transactionId, LogLevel.WARNING);
+          //  e.printStackTrace();
             return false;
         }
     }
@@ -110,7 +116,8 @@ public class TransactionDAOPostgressImpl implements TransactionDAO{
 
             return transations;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Account number not found: "+ accountId, LogLevel.WARNING);
+           // e.printStackTrace();
             return null;
         }
     }

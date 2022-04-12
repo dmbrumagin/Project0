@@ -8,7 +8,7 @@ import org.junit.jupiter.api.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CustomerServiceTests {
 
-    static CustomerService cService = new CustomerServiceImpl();
+    /*static CustomerService cService = new CustomerServiceImpl();
     static Customer testCustomer;
 
     @Test
@@ -195,5 +195,5 @@ public class CustomerServiceTests {
         String s = testCustomer.getCustomerID();
         cService.deleteCustomer(testCustomer.getCustomerID());
         Assertions.assertNull(cService.getCustomer(s));
-    }
+    }*/
 }

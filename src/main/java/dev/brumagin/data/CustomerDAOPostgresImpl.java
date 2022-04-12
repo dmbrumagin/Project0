@@ -2,6 +2,8 @@ package dev.brumagin.data;
 
 import dev.brumagin.entity.Customer;
 import dev.brumagin.utility.ConnectionUtility;
+import dev.brumagin.utility.LogLevel;
+import dev.brumagin.utility.Logger;
 
 import java.sql.*;
 
@@ -24,7 +26,8 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             customer.setCustomerID(customerId);
             return customer;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Customer not found: "+customer, LogLevel.WARNING);
+            //e.printStackTrace();
             return null;
         }
     }
@@ -45,7 +48,8 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             customer.setCustomerID(customerId);
             return customer;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Customer id not found: "+customerId, LogLevel.WARNING);
+            //e.printStackTrace();
             return null;
         }
     }
@@ -62,7 +66,8 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             ps.execute();
             return customer;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Customer not found: "+customer, LogLevel.WARNING);
+           // e.printStackTrace();
             return null;
         }
     }
@@ -78,7 +83,8 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             ps.execute();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Customer id not found: "+customerId, LogLevel.WARNING);
+            //e.printStackTrace();
             return false;
         }
     }
@@ -101,7 +107,8 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             return customer;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Customer not found: "+customer, LogLevel.WARNING);
+            //e.printStackTrace();
             return null;
         }
 
@@ -124,7 +131,8 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             return null;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Username :"+username+"/Password :"+password+" not found. ", LogLevel.WARNING);
+            //e.printStackTrace();
             return null;
         }
     }
@@ -144,7 +152,8 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             return username.equals(returnString);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Username not found: "+username, LogLevel.WARNING);
+           // e.printStackTrace();
             return false;
         }
     }
@@ -161,7 +170,8 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             ps.execute();
             return customer;
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Customer not found: "+customer, LogLevel.WARNING);
+            //e.printStackTrace();
             return null;
         }
     }
@@ -177,7 +187,8 @@ public class CustomerDAOPostgresImpl implements CustomerDAO {
             return true;
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.log("Customer not found: "+customer, LogLevel.WARNING);
+            //e.printStackTrace();
             return false;
         }
     }
