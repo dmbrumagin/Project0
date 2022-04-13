@@ -15,7 +15,7 @@ public class TransactionDaoTests {
     @Test
     @Order(1)
     void create_transaction(){
-        Transation transation = new Transation(6,5,5.01, TransactionType.TRANSFER, System.currentTimeMillis());
+        Transation transation = new Transation(2,2,5.01, TransactionType.TRANSFER, System.currentTimeMillis());
         testTransaction = transactionDAO.createTransaction(transation);
         Assertions.assertNotEquals(0,testTransaction.getTransactionId());
     }

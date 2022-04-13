@@ -35,6 +35,7 @@ public class TransactionDAOPostgressImpl implements TransactionDAO{
 
     @Override
     public Transation readTransaction(long transactionId) {
+        System.out.println(transactionId +" 4");
         try {
             Connection connection = ConnectionUtility.createConnection();
             String sql = "select * from transaction_log where transaction_id = ?;";
@@ -45,7 +46,8 @@ public class TransactionDAOPostgressImpl implements TransactionDAO{
             rs.next();
             Transation transation = new Transation(rs.getLong("origin_account"),rs.getLong("destination_account"),
                     rs.getDouble("amount_of_transaction"), TransactionType.valueOf(rs.getString("type_of_transaction")),rs.getLong("time_of_transaction"));
-
+            transation.setTransactionId(transactionId);
+            System.out.println(transation +" 3");
             return transation;
         } catch (SQLException e) {
             Logger.log("Transaction Id not found: "+transactionId, LogLevel.WARNING);

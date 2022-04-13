@@ -12,7 +12,7 @@ import org.junit.jupiter.api.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BankAccountServiceTests {
 
-   /* static BankAccountService bankAccountService = new BankAccountServiceImpl();
+    static BankAccountService bankAccountService = new BankAccountServiceImpl();
     static BankAccount testAccount;
 
     static CustomerService cService = new CustomerServiceImpl();
@@ -53,6 +53,6 @@ public class BankAccountServiceTests {
         Assertions.assertEquals(200,bankAccount.getAccountBalance());
         Assertions.assertEquals(0,currentMoney-200);
     }
-*/
+
 
 }

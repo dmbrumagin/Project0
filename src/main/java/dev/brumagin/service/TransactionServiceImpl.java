@@ -14,8 +14,8 @@ public class TransactionServiceImpl implements TransactionService{
     @Override
     public Transation createTransaction(long bankAccount, long destinationAccount, TransactionType transactionType, double amountOfTransaction, long epochTime) {
         Transation transation = new Transation(bankAccount,destinationAccount,amountOfTransaction,transactionType, epochTime);
-        transation= transactionDAO.createTransaction(transation);
-        return  transation;
+        Transation transation2= transactionDAO.createTransaction(transation);
+        return  transation2;
     }
 
     @Override
