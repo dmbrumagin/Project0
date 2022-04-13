@@ -47,7 +47,7 @@ public class BankAccountDAOPostgresImpl implements BankAccountDAO {
     public LinkedList<BankAccount> getAllBankAccounts (String userId){
         try {
             Connection connection = ConnectionUtility.createConnection();
-            String sql = "select * from account where account_holder = ? or secondary_account_holder = ?;";
+            String sql = "select * from account where account_holder = ? or secondary_account_holder = ? order by account_id;";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1,userId);
             ps.setString(2,userId);
