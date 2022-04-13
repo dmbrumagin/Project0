@@ -31,4 +31,6 @@
 - Apache Maven
 - PostgreSQL (hosted on AWS RDS)
 - Git SCM (hosted on GitHub)
+
+https://github.com/dmbrumagin/david_brumagin_p0/blob/main/ERD.JPG
  
