@@ -18,10 +18,9 @@
 
  - Use of custom data structures
  - Basic validation of user input 
- - Unit tests for all business-logic classes and DAOs
- - All exceptions are properly caught and handled
+ - Unit tests for most business-logic classes and DAOs
+ - All exceptions are caught and handled
  - Proper use of OOP principles
- - Documentation 
  - Database is 3rd Normal Form Compliant
  - Referential integrity 
  - Logging exceptions to a file using a custom logger
@@ -32,4 +31,6 @@
 - Apache Maven
 - PostgreSQL (hosted on AWS RDS)
 - Git SCM (hosted on GitHub)
+
+https://github.com/dmbrumagin/david_brumagin_p0/blob/main/ERD.JPG
  
